@@ -1456,6 +1456,793 @@
             padding: 0 2px;
         }
 
+        /* ========== TODO LIST (Dashboard) ========== */
+        .todo-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .todo-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            background: #f9fafb;
+            border-radius: 8px;
+            border-left: 4px solid #6b7280;
+            transition: all 0.2s;
+        }
+
+        .todo-item.urgent {
+            border-left-color: #ef4444;
+            background: #fef2f2;
+        }
+
+        .todo-item.normal {
+            border-left-color: #667eea;
+        }
+
+        .todo-item.completed {
+            opacity: 0.6;
+            border-left-color: #10b981;
+            background: #f0fdf4;
+        }
+
+        .todo-item.completed .todo-title {
+            text-decoration: line-through;
+            color: #6b7280;
+        }
+
+        .todo-checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .todo-content {
+            flex: 1;
+        }
+
+        .todo-title {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .todo-meta {
+            display: flex;
+            gap: 12px;
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .todo-case {
+            color: #667eea;
+        }
+
+        .todo-dday {
+            font-weight: 600;
+        }
+
+        .todo-dday.urgent {
+            color: #ef4444;
+        }
+
+        .todo-dday.normal {
+            color: #f59e0b;
+        }
+
+        .todo-priority-badge {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            background: #e5e7eb;
+            color: #6b7280;
+        }
+
+        .todo-priority-badge.urgent {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .todo-priority-badge.normal {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .todo-filter {
+            display: flex;
+            gap: 4px;
+        }
+
+        /* ========== INCIDENT STATUS BADGES ========== */
+        .incident-status {
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        .incident-status.not-incident,
+        .incident-status.in-progress {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .incident-status.closed {
+            background: #e5e7eb;
+            color: #4b5563;
+        }
+
+        .incident-status.linked {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .incident-status.completed {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .consultation-close-reason {
+            font-size: 11px;
+            color: #6b7280;
+            margin-top: 4px;
+            font-style: italic;
+        }
+
+        /* ========== CONSULTATION PAGE ========== */
+        .filter-select {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 13px;
+            background: white;
+            margin-left: 8px;
+        }
+
+        .consultation-filters {
+            display: flex;
+            gap: 8px;
+        }
+
+        .consultation-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .consultation-item {
+            display: grid;
+            grid-template-columns: 120px 1fr auto auto;
+            gap: 16px;
+            align-items: center;
+            padding: 16px;
+            background: #f9fafb;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-left: 4px solid #e5e7eb;
+        }
+
+        .consultation-item:hover {
+            background: #f3f4f6;
+            transform: translateX(4px);
+        }
+
+        .consultation-item[data-status="not-incident"],
+        .consultation-item[data-status="in-progress"] {
+            border-left-color: #ef4444;
+        }
+
+        .consultation-item[data-status="closed"] {
+            border-left-color: #9ca3af;
+            background: #f3f4f6;
+        }
+
+        .consultation-item[data-status="linked"] {
+            border-left-color: #f59e0b;
+        }
+
+        .consultation-item[data-status="completed"] {
+            border-left-color: #10b981;
+        }
+
+        .consultation-date {
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .consultation-info {
+            flex: 1;
+        }
+
+        .consultation-client {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+
+        .client-name-link {
+            font-weight: 600;
+            color: #667eea;
+            cursor: pointer;
+        }
+
+        .client-name-link:hover {
+            text-decoration: underline;
+        }
+
+        .consultation-type-badge {
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .consultation-type-badge.wage {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .consultation-type-badge.dismissal {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .consultation-type-badge.harassment {
+            background: #fce7f3;
+            color: #9d174d;
+        }
+
+        .consultation-type-badge.accident {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .consultation-summary {
+            font-size: 13px;
+            color: #4b5563;
+        }
+
+        .consultation-status {
+            text-align: center;
+        }
+
+        .consultation-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* ========== CLIENT PAGE ========== */
+        .client-search {
+            display: flex;
+            gap: 8px;
+        }
+
+        .search-input {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            width: 250px;
+        }
+
+        .client-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .client-card-item {
+            display: grid;
+            grid-template-columns: 50px 1fr auto auto;
+            gap: 16px;
+            align-items: center;
+            padding: 16px;
+            background: #f9fafb;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .client-card-item:hover {
+            background: #f3f4f6;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .client-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .client-info-main {
+            flex: 1;
+        }
+
+        .client-name-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+
+        .client-fullname {
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .client-status {
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .client-status.active {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .client-status.completed {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .client-status.consulting {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .client-contact {
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .client-stats {
+            display: flex;
+            gap: 20px;
+        }
+
+        .client-stat {
+            text-align: center;
+        }
+
+        .client-stat .stat-num {
+            font-size: 20px;
+            font-weight: 700;
+            color: #374151;
+        }
+
+        .client-stat .stat-label {
+            font-size: 11px;
+            color: #6b7280;
+        }
+
+        .client-recent {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            text-align: right;
+        }
+
+        .recent-label {
+            font-size: 11px;
+            color: #9ca3af;
+        }
+
+        .recent-case {
+            font-size: 13px;
+            color: #374151;
+        }
+
+        /* ========== CLIENT CARD MODAL ========== */
+        .client-card-header {
+            display: flex;
+            gap: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e5e7eb;
+            margin-bottom: 20px;
+        }
+
+        .client-card-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 32px;
+        }
+
+        .client-card-info {
+            flex: 1;
+        }
+
+        .client-card-name {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .client-card-contact {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 8px;
+        }
+
+        .client-card-badges {
+            display: flex;
+            gap: 8px;
+        }
+
+        .client-card-summary {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            padding: 16px;
+            background: #f9fafb;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .summary-stat {
+            text-align: center;
+        }
+
+        .summary-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .summary-label {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .client-card-section {
+            margin-bottom: 20px;
+        }
+
+        .section-subtitle {
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .client-case-item {
+            padding: 12px;
+            background: #f9fafb;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .client-case-item:hover {
+            background: #f3f4f6;
+        }
+
+        .case-badges {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+
+        .case-status-mini {
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .case-status-mini.in-progress {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .case-title-row {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .case-meta-row-mini {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .consultation-history {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .history-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            background: #f9fafb;
+            border-radius: 6px;
+        }
+
+        .history-date {
+            font-size: 12px;
+            color: #6b7280;
+            min-width: 110px;
+        }
+
+        .history-content {
+            flex: 1;
+            font-size: 13px;
+        }
+
+        .history-badge {
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 600;
+            background: #e5e7eb;
+            color: #6b7280;
+        }
+
+        .history-badge.linked {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .history-badge.closed {
+            background: #e5e7eb;
+            color: #4b5563;
+        }
+
+        .history-badge.in-progress {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .no-data-message {
+            padding: 20px;
+            text-align: center;
+            color: #9ca3af;
+            background: #f9fafb;
+            border-radius: 8px;
+        }
+
+        /* ========== CONSULTATION DETAIL MODAL ========== */
+        .consultation-detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #e5e7eb;
+            margin-bottom: 16px;
+        }
+
+        .consultation-client-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .client-name-large {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .consultation-date-info {
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .detail-section {
+            margin-bottom: 20px;
+        }
+
+        .detail-section h4 {
+            font-size: 13px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 10px;
+        }
+
+        .detail-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+
+        .detail-label {
+            color: #6b7280;
+            min-width: 80px;
+        }
+
+        .detail-value {
+            color: #1f2937;
+        }
+
+        .detail-content {
+            font-size: 14px;
+            line-height: 1.7;
+            color: #4b5563;
+            padding: 12px;
+            background: #f9fafb;
+            border-radius: 8px;
+        }
+
+        .attachment-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .attachment-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            background: #f9fafb;
+            border-radius: 6px;
+        }
+
+        .attachment-icon {
+            font-size: 18px;
+        }
+
+        .attachment-name {
+            flex: 1;
+            font-size: 13px;
+        }
+
+        .ai-summary-box {
+            padding: 12px;
+            background: linear-gradient(135deg, #f5f3ff 0%, #fdf4ff 100%);
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .ai-summary-item {
+            font-size: 13px;
+            margin-bottom: 6px;
+            color: #4b5563;
+        }
+
+        .ai-summary-item:last-child {
+            margin-bottom: 0;
+        }
+
+        /* ========== NEXT ACTION & SCHEDULE SECTIONS ========== */
+        .next-action-section, .schedule-section, .tag-section {
+            padding: 16px;
+            background: #f9fafb;
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .form-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .todo-input, .schedule-memo {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        .priority-select, .schedule-type-select {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 13px;
+            min-width: 100px;
+        }
+
+        .date-input, .datetime-input {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        .tag-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .tag-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .tag-checkbox input {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* ========== RELATED CONSULTATIONS ========== */
+        .related-consultations {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .related-consultation-item {
+            padding: 12px;
+            background: #f9fafb;
+            border-radius: 8px;
+            border-left: 3px solid #667eea;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .related-consultation-item:hover {
+            background: #f3f4f6;
+        }
+
+        .related-consultation-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+
+        .related-date {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .related-type {
+            font-size: 11px;
+            padding: 2px 8px;
+            background: #e0e7ff;
+            color: #3730a3;
+            border-radius: 10px;
+        }
+
+        .related-summary {
+            font-size: 13px;
+            color: #4b5563;
+            margin-bottom: 6px;
+        }
+
+        .related-consultation-meta {
+            font-size: 11px;
+            color: #9ca3af;
+            display: flex;
+            gap: 12px;
+        }
+
         /* Toast */
         .toast {
             position: fixed;
@@ -1990,6 +2777,115 @@
             }
         }
 
+        /* ========== RESPONSIVE FOR NEW COMPONENTS ========== */
+        @media (max-width: 768px) {
+            .consultation-item {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+
+            .consultation-actions {
+                width: 100%;
+            }
+
+            .consultation-actions .btn {
+                flex: 1;
+            }
+
+            .client-card-item {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .client-avatar {
+                margin: 0 auto;
+            }
+
+            .client-info-main {
+                text-align: center;
+            }
+
+            .client-name-row {
+                justify-content: center;
+            }
+
+            .client-stats {
+                justify-content: center;
+            }
+
+            .client-recent {
+                text-align: center;
+            }
+
+            .client-card-summary {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .form-row {
+                flex-direction: column;
+            }
+
+            .todo-input, .schedule-memo, .date-input, .datetime-input,
+            .priority-select, .schedule-type-select {
+                width: 100%;
+            }
+
+            .consultation-filters {
+                flex-direction: column;
+            }
+
+            .filter-select {
+                margin-left: 0;
+                width: 100%;
+            }
+
+            .client-search {
+                flex-direction: column;
+            }
+
+            .search-input {
+                width: 100%;
+            }
+
+            .todo-item {
+                flex-wrap: wrap;
+            }
+
+            .todo-priority-badge {
+                width: 100%;
+                text-align: center;
+                margin-top: 8px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .consultation-detail-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .client-card-header {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .client-card-summary {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .history-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 6px;
+            }
+
+            .history-date {
+                min-width: auto;
+            }
+        }
+
         /* 사건관리 페이지 모바일 탭 네비게이션 */
         .mobile-case-nav {
             display: none;
@@ -2033,11 +2929,18 @@
         <div class="nav-item active" data-page="dashboard">
             대시보드
         </div>
+        <div class="nav-item" data-page="consultations">
+            상담 관리
+            <span class="badge">6</span>
+        </div>
         <div class="nav-item" data-page="schedule">
             스케줄 현황
         </div>
         <div class="nav-item" data-page="cases">
             사건 관리
+        </div>
+        <div class="nav-item" data-page="clients">
+            고객 관리
         </div>
     </nav>
 
@@ -2116,17 +3019,91 @@
                 </div>
             </div>
 
+            <!-- 오늘 할 일 (TODO) -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>오늘 할 일</h2>
+                    <div class="todo-filter">
+                        <button class="filter-btn active" onclick="filterTodo('all', this)">전체</button>
+                        <button class="filter-btn" onclick="filterTodo('urgent', this)">긴급</button>
+                        <button class="filter-btn" onclick="filterTodo('normal', this)">일반</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="todo-list" id="todoList">
+                        <div class="todo-item urgent" data-priority="urgent">
+                            <input type="checkbox" class="todo-checkbox" onclick="toggleTodo(this)">
+                            <div class="todo-content">
+                                <div class="todo-title">김영수 진정서 작성</div>
+                                <div class="todo-meta">
+                                    <span class="todo-case">김영수 임금체불 사건</span>
+                                    <span class="todo-dday urgent">D-1</span>
+                                </div>
+                            </div>
+                            <span class="todo-priority-badge urgent">긴급</span>
+                        </div>
+                        <div class="todo-item urgent" data-priority="urgent">
+                            <input type="checkbox" class="todo-checkbox" onclick="toggleTodo(this)">
+                            <div class="todo-content">
+                                <div class="todo-title">홍길동 콜백 전화</div>
+                                <div class="todo-meta">
+                                    <span class="todo-case">신규 상담</span>
+                                    <span class="todo-dday urgent">D-Day</span>
+                                </div>
+                            </div>
+                            <span class="todo-priority-badge urgent">긴급</span>
+                        </div>
+                        <div class="todo-item normal" data-priority="normal">
+                            <input type="checkbox" class="todo-checkbox" onclick="toggleTodo(this)">
+                            <div class="todo-content">
+                                <div class="todo-title">정수민 증인 진술서 확보</div>
+                                <div class="todo-meta">
+                                    <span class="todo-case">정수민 직장내괴롭힘</span>
+                                    <span class="todo-dday normal">D-3</span>
+                                </div>
+                            </div>
+                            <span class="todo-priority-badge normal">일반</span>
+                        </div>
+                        <div class="todo-item normal" data-priority="normal">
+                            <input type="checkbox" class="todo-checkbox" onclick="toggleTodo(this)">
+                            <div class="todo-content">
+                                <div class="todo-title">최민지 상담 자료 검토</div>
+                                <div class="todo-meta">
+                                    <span class="todo-case">최민지 부당해고 사건</span>
+                                    <span class="todo-dday normal">D-5</span>
+                                </div>
+                            </div>
+                            <span class="todo-priority-badge normal">일반</span>
+                        </div>
+                        <div class="todo-item completed" data-priority="normal">
+                            <input type="checkbox" class="todo-checkbox" checked onclick="toggleTodo(this)">
+                            <div class="todo-content">
+                                <div class="todo-title">이영희 녹음파일 분석</div>
+                                <div class="todo-meta">
+                                    <span class="todo-case">이영희 괴롭힘 상담</span>
+                                    <span class="todo-dday">완료</span>
+                                </div>
+                            </div>
+                            <span class="todo-priority-badge">완료</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- 콜백 요청 목록 -->
             <div class="card">
                 <div class="card-header">
                     <h2>콜백 요청 목록</h2>
-                    <button class="btn btn-secondary">전체보기</button>
+                    <button class="btn btn-secondary" onclick="navigateToConsultations()">전체보기</button>
                 </div>
                 <div class="card-body">
                     <div class="callback-list">
-                        <div class="callback-item urgent" onclick="showCallbackModal()">
+                        <div class="callback-item urgent" onclick="showCallbackModal('홍길동')">
                             <div class="info">
-                                <div class="client-name">홍길동</div>
+                                <div class="client-name">
+                                    홍길동
+                                    <span class="incident-status not-incident">미사건화</span>
+                                </div>
                                 <div class="summary">6개월간 임금 체불 상담 요청. 회사 측에서 경영난을 이유로 급여를 지급하지 않고 있음. 퇴직금도 미지급 상태.</div>
                                 <div class="meta">
                                     <span>010-1234-5678</span>
@@ -2136,13 +3113,16 @@
                             </div>
                             <div class="actions">
                                 <button class="btn btn-primary" onclick="event.stopPropagation(); showToast('전화 연결 중...')">전화하기</button>
-                                <button class="btn btn-kakao" onclick="event.stopPropagation(); showKakaoModal()">카톡 요청</button>
+                                <button class="btn btn-success" onclick="event.stopPropagation(); convertToIncident('홍길동')">사건화</button>
                             </div>
                         </div>
 
-                        <div class="callback-item" onclick="showCallbackModal()">
+                        <div class="callback-item" onclick="showCallbackModal('이영희')">
                             <div class="info">
-                                <div class="client-name">이영희</div>
+                                <div class="client-name">
+                                    이영희
+                                    <span class="incident-status not-incident">미사건화</span>
+                                </div>
                                 <div class="summary">직장 내 괴롭힘 상담. 상사로부터 지속적인 폭언과 업무 배제를 당하고 있음. 녹음 파일 보유.</div>
                                 <div class="meta">
                                     <span>010-2345-6789</span>
@@ -2151,13 +3131,16 @@
                             </div>
                             <div class="actions">
                                 <button class="btn btn-primary" onclick="event.stopPropagation(); showToast('전화 연결 중...')">전화하기</button>
-                                <button class="btn btn-kakao" onclick="event.stopPropagation(); showKakaoModal()">카톡 요청</button>
+                                <button class="btn btn-success" onclick="event.stopPropagation(); convertToIncident('이영희')">사건화</button>
                             </div>
                         </div>
 
-                        <div class="callback-item" onclick="showCallbackModal()">
+                        <div class="callback-item" onclick="showCallbackModal('박철수')">
                             <div class="info">
-                                <div class="client-name">박철수</div>
+                                <div class="client-name">
+                                    박철수
+                                    <span class="incident-status not-incident">미사건화</span>
+                                </div>
                                 <div class="summary">부당해고 관련 상담. 정당한 사유 없이 해고 통보를 받음. 해고예고수당도 미지급.</div>
                                 <div class="meta">
                                     <span>010-3456-7890</span>
@@ -2166,7 +3149,7 @@
                             </div>
                             <div class="actions">
                                 <button class="btn btn-primary" onclick="event.stopPropagation(); showToast('전화 연결 중...')">전화하기</button>
-                                <button class="btn btn-kakao" onclick="event.stopPropagation(); showKakaoModal()">카톡 요청</button>
+                                <button class="btn btn-success" onclick="event.stopPropagation(); convertToIncident('박철수')">사건화</button>
                             </div>
                         </div>
                     </div>
@@ -2174,7 +3157,221 @@
             </div>
         </div>
 
-        <!-- Page 2: 스케줄 현황 -->
+        <!-- Page 2: 상담 관리 -->
+        <div class="page" id="page-consultations">
+            <div class="stats-grid" style="grid-template-columns: repeat(5, 1fr);">
+                <div class="stat-card">
+                    <div class="label">전체 상담</div>
+                    <div class="value">28</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">진행중</div>
+                    <div class="value urgent">3</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">상담종결</div>
+                    <div class="value" style="color: #6b7280;">4</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">사건 연결됨</div>
+                    <div class="value" style="color: #f59e0b;">16</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">사건 완료</div>
+                    <div class="value success">5</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>상담 목록</h2>
+                    <div class="consultation-filters">
+                        <select class="filter-select" onchange="filterConsultations(this.value)">
+                            <option value="all">전체 상태</option>
+                            <option value="in-progress">진행중</option>
+                            <option value="closed">상담종결</option>
+                            <option value="linked">사건 연결됨</option>
+                            <option value="completed">사건 완료</option>
+                        </select>
+                        <select class="filter-select" onchange="filterConsultationType(this.value)">
+                            <option value="all">전체 유형</option>
+                            <option value="wage">임금체불</option>
+                            <option value="dismissal">부당해고</option>
+                            <option value="harassment">직장내괴롭힘</option>
+                            <option value="accident">산재</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="consultation-list">
+                        <!-- 진행중 상담 -->
+                        <div class="consultation-item" data-status="in-progress" onclick="showConsultationDetail('홍길동')">
+                            <div class="consultation-date">2024-01-15 10:30</div>
+                            <div class="consultation-info">
+                                <div class="consultation-client">
+                                    <span class="client-name-link" onclick="event.stopPropagation(); showClientCard('홍길동')">홍길동</span>
+                                    <span class="consultation-type-badge wage">임금체불</span>
+                                </div>
+                                <div class="consultation-summary">6개월간 임금 체불 상담. 총 미지급 금액 약 2,100만원.</div>
+                            </div>
+                            <div class="consultation-status">
+                                <span class="incident-status in-progress">진행중</span>
+                            </div>
+                            <div class="consultation-actions">
+                                <button class="btn btn-success btn-sm" onclick="event.stopPropagation(); convertToIncident('홍길동')">사건화</button>
+                                <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation(); closeConsultation('홍길동')">상담종결</button>
+                            </div>
+                        </div>
+
+                        <div class="consultation-item" data-status="in-progress" onclick="showConsultationDetail('이영희')">
+                            <div class="consultation-date">2024-01-14 15:20</div>
+                            <div class="consultation-info">
+                                <div class="consultation-client">
+                                    <span class="client-name-link" onclick="event.stopPropagation(); showClientCard('이영희')">이영희</span>
+                                    <span class="consultation-type-badge harassment">괴롭힘</span>
+                                </div>
+                                <div class="consultation-summary">상사로부터 지속적인 폭언과 업무 배제. 녹음 파일 보유.</div>
+                            </div>
+                            <div class="consultation-status">
+                                <span class="incident-status in-progress">진행중</span>
+                            </div>
+                            <div class="consultation-actions">
+                                <button class="btn btn-success btn-sm" onclick="event.stopPropagation(); convertToIncident('이영희')">사건화</button>
+                                <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation(); closeConsultation('이영희')">상담종결</button>
+                            </div>
+                        </div>
+
+                        <div class="consultation-item" data-status="in-progress" onclick="showConsultationDetail('박철수')">
+                            <div class="consultation-date">2024-01-14 11:00</div>
+                            <div class="consultation-info">
+                                <div class="consultation-client">
+                                    <span class="client-name-link" onclick="event.stopPropagation(); showClientCard('박철수')">박철수</span>
+                                    <span class="consultation-type-badge dismissal">해고</span>
+                                </div>
+                                <div class="consultation-summary">정당한 사유 없이 해고 통보. 해고예고수당 미지급.</div>
+                            </div>
+                            <div class="consultation-status">
+                                <span class="incident-status in-progress">진행중</span>
+                            </div>
+                            <div class="consultation-actions">
+                                <button class="btn btn-success btn-sm" onclick="event.stopPropagation(); convertToIncident('박철수')">사건화</button>
+                                <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation(); closeConsultation('박철수')">상담종결</button>
+                            </div>
+                        </div>
+
+                        <!-- 상담종결 (사건화 없이 종결) -->
+                        <div class="consultation-item" data-status="closed" onclick="showConsultationDetail('김태희')">
+                            <div class="consultation-date">2024-01-10 09:30</div>
+                            <div class="consultation-info">
+                                <div class="consultation-client">
+                                    <span class="client-name-link" onclick="event.stopPropagation(); showClientCard('김태희')">김태희</span>
+                                    <span class="consultation-type-badge wage">임금</span>
+                                </div>
+                                <div class="consultation-summary">단순 문의. 체불 금액이 소액이라 본인 해결 희망.</div>
+                                <div class="consultation-close-reason">종결 사유: 고객 취소 (본인 해결)</div>
+                            </div>
+                            <div class="consultation-status">
+                                <span class="incident-status closed">상담종결</span>
+                            </div>
+                            <div class="consultation-actions">
+                                <button class="btn btn-primary btn-sm" onclick="event.stopPropagation(); reopenConsultation('김태희')">재상담/사건화</button>
+                            </div>
+                        </div>
+
+                        <div class="consultation-item" data-status="closed" onclick="showConsultationDetail('이준호')">
+                            <div class="consultation-date">2024-01-08 14:00</div>
+                            <div class="consultation-info">
+                                <div class="consultation-client">
+                                    <span class="client-name-link" onclick="event.stopPropagation(); showClientCard('이준호')">이준호</span>
+                                    <span class="consultation-type-badge dismissal">해고</span>
+                                </div>
+                                <div class="consultation-summary">해고 무효 주장 검토. 해고 사유 정당성 인정되어 수임 불가 판단.</div>
+                                <div class="consultation-close-reason">종결 사유: 수임 불가 (법적 근거 부족)</div>
+                            </div>
+                            <div class="consultation-status">
+                                <span class="incident-status closed">상담종결</span>
+                            </div>
+                            <div class="consultation-actions">
+                                <button class="btn btn-primary btn-sm" onclick="event.stopPropagation(); reopenConsultation('이준호')">재상담/사건화</button>
+                            </div>
+                        </div>
+
+                        <div class="consultation-item" data-status="closed" onclick="showConsultationDetail('박서연')">
+                            <div class="consultation-date">2024-01-05 11:00</div>
+                            <div class="consultation-info">
+                                <div class="consultation-client">
+                                    <span class="client-name-link" onclick="event.stopPropagation(); showClientCard('박서연')">박서연</span>
+                                    <span class="consultation-type-badge harassment">괴롭힘</span>
+                                </div>
+                                <div class="consultation-summary">직장 내 괴롭힘 문의. 증거 부족으로 추후 재상담 예정.</div>
+                                <div class="consultation-close-reason">종결 사유: 증거 확보 후 재상담 예정</div>
+                            </div>
+                            <div class="consultation-status">
+                                <span class="incident-status closed">상담종결</span>
+                            </div>
+                            <div class="consultation-actions">
+                                <button class="btn btn-primary btn-sm" onclick="event.stopPropagation(); reopenConsultation('박서연')">재상담/사건화</button>
+                            </div>
+                        </div>
+
+                        <!-- 사건 연결됨 -->
+                        <div class="consultation-item" data-status="linked" onclick="showConsultationDetail('김영수')">
+                            <div class="consultation-date">2024-01-12 09:00</div>
+                            <div class="consultation-info">
+                                <div class="consultation-client">
+                                    <span class="client-name-link" onclick="event.stopPropagation(); showClientCard('김영수')">김영수</span>
+                                    <span class="consultation-type-badge wage">임금체불</span>
+                                    <span class="consultation-type-badge dismissal">해고</span>
+                                </div>
+                                <div class="consultation-summary">9월부터 임금체불 시작. 1월 10일 부당해고 통보.</div>
+                            </div>
+                            <div class="consultation-status">
+                                <span class="incident-status linked">사건연결됨</span>
+                            </div>
+                            <div class="consultation-actions">
+                                <button class="btn btn-primary btn-sm" onclick="event.stopPropagation(); navigateToCase('김영수 임금체불 사건')">사건 보기</button>
+                            </div>
+                        </div>
+
+                        <div class="consultation-item" data-status="linked" onclick="showConsultationDetail('정수민')">
+                            <div class="consultation-date">2024-01-10 14:00</div>
+                            <div class="consultation-info">
+                                <div class="consultation-client">
+                                    <span class="client-name-link" onclick="event.stopPropagation(); showClientCard('정수민')">정수민</span>
+                                    <span class="consultation-type-badge harassment">괴롭힘</span>
+                                </div>
+                                <div class="consultation-summary">팀장으로부터 업무 관련 폭언 및 부당 업무지시.</div>
+                            </div>
+                            <div class="consultation-status">
+                                <span class="incident-status linked">사건연결됨</span>
+                            </div>
+                            <div class="consultation-actions">
+                                <button class="btn btn-primary btn-sm" onclick="event.stopPropagation(); navigateToCase('정수민 직장내괴롭힘')">사건 보기</button>
+                            </div>
+                        </div>
+
+                        <div class="consultation-item" data-status="completed" onclick="showConsultationDetail('강미영')">
+                            <div class="consultation-date">2023-12-20 10:00</div>
+                            <div class="consultation-info">
+                                <div class="consultation-client">
+                                    <span class="client-name-link" onclick="event.stopPropagation(); showClientCard('강미영')">강미영</span>
+                                    <span class="consultation-type-badge wage">임금체불</span>
+                                </div>
+                                <div class="consultation-summary">3개월 임금 체불. 합의 완료.</div>
+                            </div>
+                            <div class="consultation-status">
+                                <span class="incident-status completed">사건완료</span>
+                            </div>
+                            <div class="consultation-actions">
+                                <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation(); showToast('완료된 사건 보기')">히스토리</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page 3: 스케줄 현황 -->
         <div class="page" id="page-schedule">
             <div class="card">
                 <div class="card-body">
@@ -2629,6 +3826,35 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- 관련 상담 내역 -->
+                        <div class="ai-summary-section">
+                            <h3 class="section-title">관련 상담 내역</h3>
+                            <div class="related-consultations">
+                                <div class="related-consultation-item" onclick="showConsultationDetail('김영수')">
+                                    <div class="related-consultation-header">
+                                        <span class="related-date">2024-01-12 09:00</span>
+                                        <span class="related-type">최초 상담</span>
+                                    </div>
+                                    <div class="related-summary">9월부터 급여 체불 시작. 4개월간 총 1,400만원 미지급. 1월 10일 부당해고 통보.</div>
+                                    <div class="related-consultation-meta">
+                                        <span>상담자: 김노무 노무사</span>
+                                        <span>녹취 있음</span>
+                                    </div>
+                                </div>
+                                <div class="related-consultation-item" onclick="showConsultationDetail('김영수')">
+                                    <div class="related-consultation-header">
+                                        <span class="related-date">2024-01-13 14:30</span>
+                                        <span class="related-type">추가 상담</span>
+                                    </div>
+                                    <div class="related-summary">근로계약서 및 급여명세서 제출 확인. 추가 증거자료 요청.</div>
+                                    <div class="related-consultation-meta">
+                                        <span>상담자: 김노무 노무사</span>
+                                        <span>메모 있음</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -2802,20 +4028,204 @@
                 </div>
             </div>
         </div>
+
+        <!-- Page 5: 고객 관리 -->
+        <div class="page" id="page-clients">
+            <div class="stats-grid" style="grid-template-columns: repeat(4, 1fr);">
+                <div class="stat-card">
+                    <div class="label">전체 고객</div>
+                    <div class="value">47</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">상담 중</div>
+                    <div class="value">6</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">진행중 사건</div>
+                    <div class="value success">12</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">완료 사건</div>
+                    <div class="value">29</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>고객 목록</h2>
+                    <div class="client-search">
+                        <input type="text" placeholder="고객명 또는 연락처 검색..." class="search-input">
+                        <button class="btn btn-primary">검색</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="client-list">
+                        <div class="client-card-item" onclick="showClientCard('김영수')">
+                            <div class="client-avatar">김</div>
+                            <div class="client-info-main">
+                                <div class="client-name-row">
+                                    <span class="client-fullname">김영수</span>
+                                    <span class="client-status active">진행중</span>
+                                </div>
+                                <div class="client-contact">010-1111-2222</div>
+                            </div>
+                            <div class="client-stats">
+                                <div class="client-stat">
+                                    <span class="stat-num">3</span>
+                                    <span class="stat-label">상담</span>
+                                </div>
+                                <div class="client-stat">
+                                    <span class="stat-num">1</span>
+                                    <span class="stat-label">진행</span>
+                                </div>
+                                <div class="client-stat">
+                                    <span class="stat-num">0</span>
+                                    <span class="stat-label">완료</span>
+                                </div>
+                            </div>
+                            <div class="client-recent">
+                                <span class="recent-label">최근 사건:</span>
+                                <span class="recent-case">임금체불 및 부당해고</span>
+                            </div>
+                        </div>
+
+                        <div class="client-card-item" onclick="showClientCard('최민지')">
+                            <div class="client-avatar">최</div>
+                            <div class="client-info-main">
+                                <div class="client-name-row">
+                                    <span class="client-fullname">최민지</span>
+                                    <span class="client-status active">진행중</span>
+                                </div>
+                                <div class="client-contact">010-3333-4444</div>
+                            </div>
+                            <div class="client-stats">
+                                <div class="client-stat">
+                                    <span class="stat-num">2</span>
+                                    <span class="stat-label">상담</span>
+                                </div>
+                                <div class="client-stat">
+                                    <span class="stat-num">1</span>
+                                    <span class="stat-label">진행</span>
+                                </div>
+                                <div class="client-stat">
+                                    <span class="stat-num">0</span>
+                                    <span class="stat-label">완료</span>
+                                </div>
+                            </div>
+                            <div class="client-recent">
+                                <span class="recent-label">최근 사건:</span>
+                                <span class="recent-case">부당해고</span>
+                            </div>
+                        </div>
+
+                        <div class="client-card-item" onclick="showClientCard('정수민')">
+                            <div class="client-avatar">정</div>
+                            <div class="client-info-main">
+                                <div class="client-name-row">
+                                    <span class="client-fullname">정수민</span>
+                                    <span class="client-status active">진행중</span>
+                                </div>
+                                <div class="client-contact">010-5555-6666</div>
+                            </div>
+                            <div class="client-stats">
+                                <div class="client-stat">
+                                    <span class="stat-num">4</span>
+                                    <span class="stat-label">상담</span>
+                                </div>
+                                <div class="client-stat">
+                                    <span class="stat-num">1</span>
+                                    <span class="stat-label">진행</span>
+                                </div>
+                                <div class="client-stat">
+                                    <span class="stat-num">0</span>
+                                    <span class="stat-label">완료</span>
+                                </div>
+                            </div>
+                            <div class="client-recent">
+                                <span class="recent-label">최근 사건:</span>
+                                <span class="recent-case">직장내괴롭힘</span>
+                            </div>
+                        </div>
+
+                        <div class="client-card-item" onclick="showClientCard('강미영')">
+                            <div class="client-avatar">강</div>
+                            <div class="client-info-main">
+                                <div class="client-name-row">
+                                    <span class="client-fullname">강미영</span>
+                                    <span class="client-status completed">완료</span>
+                                </div>
+                                <div class="client-contact">010-7777-8888</div>
+                            </div>
+                            <div class="client-stats">
+                                <div class="client-stat">
+                                    <span class="stat-num">2</span>
+                                    <span class="stat-label">상담</span>
+                                </div>
+                                <div class="client-stat">
+                                    <span class="stat-num">0</span>
+                                    <span class="stat-label">진행</span>
+                                </div>
+                                <div class="client-stat">
+                                    <span class="stat-num">1</span>
+                                    <span class="stat-label">완료</span>
+                                </div>
+                            </div>
+                            <div class="client-recent">
+                                <span class="recent-label">최근 사건:</span>
+                                <span class="recent-case">임금체불 (합의완료)</span>
+                            </div>
+                        </div>
+
+                        <div class="client-card-item" onclick="showClientCard('홍길동')">
+                            <div class="client-avatar">홍</div>
+                            <div class="client-info-main">
+                                <div class="client-name-row">
+                                    <span class="client-fullname">홍길동</span>
+                                    <span class="client-status consulting">상담중</span>
+                                </div>
+                                <div class="client-contact">010-1234-5678</div>
+                            </div>
+                            <div class="client-stats">
+                                <div class="client-stat">
+                                    <span class="stat-num">1</span>
+                                    <span class="stat-label">상담</span>
+                                </div>
+                                <div class="client-stat">
+                                    <span class="stat-num">0</span>
+                                    <span class="stat-label">진행</span>
+                                </div>
+                                <div class="client-stat">
+                                    <span class="stat-num">0</span>
+                                    <span class="stat-label">완료</span>
+                                </div>
+                            </div>
+                            <div class="client-recent">
+                                <span class="recent-label">최근 상담:</span>
+                                <span class="recent-case">임금체불 (미사건화)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
 
-    <!-- Callback Modal -->
+    <!-- Callback Modal (Enhanced) -->
     <div class="modal-overlay" id="callbackModal">
-        <div class="modal">
+        <div class="modal" style="max-width: 600px;">
             <div class="modal-header">
                 <h3>상담 상세</h3>
                 <button class="modal-close" onclick="closeModal('callbackModal')">&times;</button>
             </div>
             <div class="modal-body">
-                <div class="form-group">
-                    <label>고객명</label>
-                    <input type="text" value="홍길동" readonly>
+                <div class="consultation-detail-header">
+                    <div class="consultation-client-info">
+                        <span class="client-name-large" id="modalClientName">홍길동</span>
+                        <span class="incident-status not-incident" id="modalIncidentStatus">미사건화</span>
+                    </div>
+                    <div class="consultation-date-info">2024-01-15 10:30</div>
                 </div>
+
                 <div class="form-group">
                     <label>연락처</label>
                     <input type="text" value="010-1234-5678" readonly>
@@ -2826,16 +4236,221 @@
                 </div>
                 <div class="form-group">
                     <label>AI 요약</label>
-                    <textarea readonly>- 이슈: 임금체불, 퇴직금 미지급
-- 체불 기간: 6개월
-- 추정 금액: 2,100만원
-- 회사 측 입장: 경영난
-- 권장 조치: 고용노동청 진정서 제출 검토</textarea>
+                    <div class="ai-summary-box">
+                        <div class="ai-summary-item"><strong>이슈:</strong> 임금체불, 퇴직금 미지급</div>
+                        <div class="ai-summary-item"><strong>체불 기간:</strong> 6개월</div>
+                        <div class="ai-summary-item"><strong>추정 금액:</strong> 2,100만원</div>
+                        <div class="ai-summary-item"><strong>회사 측 입장:</strong> 경영난</div>
+                        <div class="ai-summary-item"><strong>권장 조치:</strong> 고용노동청 진정서 제출 검토</div>
+                    </div>
+                </div>
+
+                <!-- 다음 할 일 추가 섹션 -->
+                <div class="next-action-section">
+                    <h4 class="section-subtitle">다음 할 일 추가</h4>
+                    <div class="form-row">
+                        <input type="text" placeholder="할 일 내용 입력..." class="todo-input">
+                        <select class="priority-select">
+                            <option value="normal">일반</option>
+                            <option value="urgent">긴급</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <input type="date" class="date-input">
+                        <button class="btn btn-sm btn-primary" onclick="addNextTodo()">추가</button>
+                    </div>
+                </div>
+
+                <!-- 일정 잡기 섹션 -->
+                <div class="schedule-section">
+                    <h4 class="section-subtitle">일정 잡기</h4>
+                    <div class="form-row">
+                        <select class="schedule-type-select">
+                            <option value="consultation">상담 예약</option>
+                            <option value="call">전화 예약</option>
+                            <option value="meeting">미팅</option>
+                        </select>
+                        <input type="datetime-local" class="datetime-input">
+                    </div>
+                    <div class="form-row">
+                        <input type="text" placeholder="일정 메모..." class="schedule-memo">
+                        <button class="btn btn-sm btn-primary" onclick="addSchedule()">일정 등록</button>
+                    </div>
+                </div>
+
+                <!-- 태그/상태 지정 -->
+                <div class="tag-section">
+                    <h4 class="section-subtitle">태그 지정</h4>
+                    <div class="tag-list">
+                        <label class="tag-checkbox"><input type="checkbox" checked> 임금체불</label>
+                        <label class="tag-checkbox"><input type="checkbox"> 부당해고</label>
+                        <label class="tag-checkbox"><input type="checkbox"> 괴롭힘</label>
+                        <label class="tag-checkbox"><input type="checkbox"> 산재</label>
+                        <label class="tag-checkbox"><input type="checkbox"> 퇴직금</label>
+                        <label class="tag-checkbox"><input type="checkbox"> 긴급</label>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" onclick="closeModal('callbackModal')">닫기</button>
-                <button class="btn btn-success" onclick="closeModal('callbackModal'); showToast('사건으로 등록되었습니다')">사건화</button>
+                <button class="btn" style="background: #9ca3af; color: white;" onclick="closeModal('callbackModal'); closeConsultation(document.getElementById('modalClientName').textContent)">상담 종결</button>
+                <button class="btn btn-kakao" onclick="showKakaoModal()">카톡 요청</button>
+                <button class="btn btn-success" onclick="closeModal('callbackModal'); convertToIncident(document.getElementById('modalClientName').textContent)">사건화</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Client Card Modal -->
+    <div class="modal-overlay" id="clientCardModal">
+        <div class="modal" style="max-width: 650px;">
+            <div class="modal-header">
+                <h3>고객 카드</h3>
+                <button class="modal-close" onclick="closeModal('clientCardModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="client-card-header">
+                    <div class="client-card-avatar">김</div>
+                    <div class="client-card-info">
+                        <h2 class="client-card-name" id="clientCardName">김영수</h2>
+                        <div class="client-card-contact">010-1111-2222</div>
+                        <div class="client-card-badges">
+                            <span class="client-status active">진행중 사건 있음</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="client-card-summary">
+                    <div class="summary-stat">
+                        <div class="summary-value">3</div>
+                        <div class="summary-label">총 상담 횟수</div>
+                    </div>
+                    <div class="summary-stat">
+                        <div class="summary-value">1</div>
+                        <div class="summary-label">진행중 사건</div>
+                    </div>
+                    <div class="summary-stat">
+                        <div class="summary-value">0</div>
+                        <div class="summary-label">완료 사건</div>
+                    </div>
+                    <div class="summary-stat">
+                        <div class="summary-value">2024.01</div>
+                        <div class="summary-label">최초 상담일</div>
+                    </div>
+                </div>
+
+                <div class="client-card-section">
+                    <h4 class="section-subtitle">현재 사건</h4>
+                    <div class="client-case-item active" onclick="navigateToCase('김영수 임금체불 사건'); closeModal('clientCardModal');">
+                        <div class="case-badges">
+                            <span class="case-item-badge wage">임금체불</span>
+                            <span class="case-item-badge dismissal">부당해고</span>
+                            <span class="case-status-mini in-progress">진행중</span>
+                        </div>
+                        <div class="case-title-row">임금체불 및 부당해고 사건</div>
+                        <div class="case-meta-row-mini">수임일: 2024-01-12 | 청구액: 1,400만원</div>
+                    </div>
+                </div>
+
+                <div class="client-card-section">
+                    <h4 class="section-subtitle">상담 히스토리</h4>
+                    <div class="consultation-history">
+                        <div class="history-item">
+                            <div class="history-date">2024-01-13 14:30</div>
+                            <div class="history-content">추가 상담 - 근로계약서 및 급여명세서 제출 확인</div>
+                            <span class="history-badge linked">사건연결</span>
+                        </div>
+                        <div class="history-item">
+                            <div class="history-date">2024-01-12 09:00</div>
+                            <div class="history-content">최초 상담 - 9월부터 임금체불, 1월 10일 부당해고 통보</div>
+                            <span class="history-badge linked">사건연결</span>
+                        </div>
+                        <div class="history-item">
+                            <div class="history-date">2024-01-10 15:30</div>
+                            <div class="history-content">전화 문의 - 해고 통보 직후 긴급 상담 요청</div>
+                            <span class="history-badge">문의</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="client-card-section">
+                    <h4 class="section-subtitle">과거 사건 히스토리</h4>
+                    <div class="no-data-message">과거 완료된 사건이 없습니다.</div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('clientCardModal')">닫기</button>
+                <button class="btn btn-primary" onclick="navigateToCase('김영수 임금체불 사건'); closeModal('clientCardModal');">현재 사건 보기</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Consultation Detail Modal -->
+    <div class="modal-overlay" id="consultationDetailModal">
+        <div class="modal" style="max-width: 600px;">
+            <div class="modal-header">
+                <h3>상담 기록 상세</h3>
+                <button class="modal-close" onclick="closeModal('consultationDetailModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="consultation-detail-header">
+                    <div class="consultation-client-info">
+                        <span class="client-name-large">홍길동</span>
+                        <span class="incident-status not-incident">미사건화</span>
+                    </div>
+                    <div class="consultation-date-info">2024-01-15 10:30</div>
+                </div>
+
+                <div class="detail-section">
+                    <h4>상담 정보</h4>
+                    <div class="detail-row">
+                        <span class="detail-label">상담 유형:</span>
+                        <span class="detail-value">전화 상담</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">상담 시간:</span>
+                        <span class="detail-value">32분</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">상담자:</span>
+                        <span class="detail-value">김노무 노무사</span>
+                    </div>
+                </div>
+
+                <div class="detail-section">
+                    <h4>상담 내용</h4>
+                    <div class="detail-content">
+                        6개월간 임금 체불 상담 요청. 회사 측에서 경영난을 이유로 급여를 지급하지 않고 있음.
+                        퇴직금도 미지급 상태. 총 미지급 금액은 약 2,100만원으로 추정됨.
+                        고객은 빠른 해결을 원하며, 필요시 소송도 고려 중.
+                    </div>
+                </div>
+
+                <div class="detail-section">
+                    <h4>녹취/메모</h4>
+                    <div class="attachment-list">
+                        <div class="attachment-item">
+                            <span class="attachment-icon">🎙</span>
+                            <span class="attachment-name">통화녹취_20240115_1030.mp3</span>
+                            <button class="btn btn-sm btn-secondary">재생</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="detail-section">
+                    <h4>AI 분석 결과</h4>
+                    <div class="ai-summary-box">
+                        <div class="ai-summary-item"><strong>사건 유형:</strong> 임금체불</div>
+                        <div class="ai-summary-item"><strong>체불 기간:</strong> 6개월</div>
+                        <div class="ai-summary-item"><strong>추정 금액:</strong> 2,100만원</div>
+                        <div class="ai-summary-item"><strong>긴급도:</strong> <span style="color: #ef4444;">높음</span></div>
+                        <div class="ai-summary-item"><strong>권장 조치:</strong> 고용노동청 진정서 제출</div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('consultationDetailModal')">닫기</button>
+                <button class="btn" style="background: #9ca3af; color: white;" onclick="closeModal('consultationDetailModal'); closeConsultation(document.querySelector('#consultationDetailModal .client-name-large').textContent)">상담 종결</button>
+                <button class="btn btn-success" onclick="closeModal('consultationDetailModal'); convertToIncident(document.querySelector('#consultationDetailModal .client-name-large').textContent)">사건화</button>
             </div>
         </div>
     </div>
@@ -2972,10 +4587,7 @@
             setTab('incident', document.querySelector('.tabs .tab:last-child'));
         }
 
-        // Modals
-        function showCallbackModal() {
-            document.getElementById('callbackModal').classList.add('active');
-        }
+        // Modals - showCallbackModal moved to bottom with other new functions
 
         function showKakaoModal() {
             document.getElementById('kakaoModal').classList.add('active');
@@ -3105,6 +4717,154 @@
             });
 
             showToast('사건 관리로 이동: ' + caseName);
+        }
+
+        // Navigate to Consultations page
+        function navigateToConsultations() {
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelector('[data-page="consultations"]').classList.add('active');
+            document.getElementById('page-consultations').classList.add('active');
+        }
+
+        // Convert consultation to incident
+        function convertToIncident(clientName) {
+            showToast(clientName + ' 상담이 사건으로 등록되었습니다');
+
+            // Update incident status display
+            document.querySelectorAll('.incident-status').forEach(status => {
+                if (status.closest('.callback-item, .consultation-item')?.textContent.includes(clientName)) {
+                    status.className = 'incident-status linked';
+                    status.textContent = '사건연결됨';
+                }
+            });
+        }
+
+        // Show client card modal
+        function showClientCard(clientName) {
+            const modal = document.getElementById('clientCardModal');
+            const nameEl = document.getElementById('clientCardName');
+            const avatarEl = modal.querySelector('.client-card-avatar');
+
+            nameEl.textContent = clientName;
+            avatarEl.textContent = clientName.charAt(0);
+
+            modal.classList.add('active');
+        }
+
+        // Show consultation detail modal
+        function showConsultationDetail(clientName) {
+            const modal = document.getElementById('consultationDetailModal');
+            modal.querySelector('.client-name-large').textContent = clientName;
+            modal.classList.add('active');
+        }
+
+        // Filter consultations by status
+        function filterConsultations(status) {
+            const items = document.querySelectorAll('.consultation-item');
+            items.forEach(item => {
+                if (status === 'all' || item.dataset.status === status) {
+                    item.style.display = 'grid';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        // Filter consultations by type
+        function filterConsultationType(type) {
+            // Demo functionality
+            showToast('유형 필터: ' + type);
+        }
+
+        // Close consultation without creating incident
+        function closeConsultation(clientName) {
+            const reason = prompt('상담 종결 사유를 입력하세요:\n(예: 고객 취소, 수임 불가, 단순 문의, 추후 재상담 예정 등)');
+            if (reason) {
+                showToast(clientName + ' 상담이 종결 처리되었습니다');
+                // Update UI - find the item and change status
+                document.querySelectorAll('.consultation-item').forEach(item => {
+                    if (item.textContent.includes(clientName)) {
+                        item.dataset.status = 'closed';
+                        const statusEl = item.querySelector('.incident-status');
+                        if (statusEl) {
+                            statusEl.className = 'incident-status closed';
+                            statusEl.textContent = '상담종결';
+                        }
+                    }
+                });
+            }
+        }
+
+        // Reopen closed consultation for potential incident creation
+        function reopenConsultation(clientName) {
+            if (confirm(clientName + ' 상담을 다시 열겠습니까?\n\n재상담 또는 사건화를 진행할 수 있습니다.')) {
+                showToast(clientName + ' 상담이 다시 열렸습니다');
+                // Update UI - find the item and change status back to in-progress
+                document.querySelectorAll('.consultation-item').forEach(item => {
+                    if (item.textContent.includes(clientName) && item.dataset.status === 'closed') {
+                        item.dataset.status = 'in-progress';
+                        const statusEl = item.querySelector('.incident-status');
+                        if (statusEl) {
+                            statusEl.className = 'incident-status in-progress';
+                            statusEl.textContent = '진행중';
+                        }
+                    }
+                });
+                // Show consultation detail modal
+                showConsultationDetail(clientName);
+            }
+        }
+
+        // Filter todo list
+        function filterTodo(priority, btn) {
+            document.querySelectorAll('.todo-filter .filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const items = document.querySelectorAll('.todo-item');
+            items.forEach(item => {
+                if (priority === 'all' || item.dataset.priority === priority) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        // Toggle todo completion
+        function toggleTodo(checkbox) {
+            const todoItem = checkbox.closest('.todo-item');
+            if (checkbox.checked) {
+                todoItem.classList.add('completed');
+                todoItem.dataset.priority = 'completed';
+            } else {
+                todoItem.classList.remove('completed');
+                // Restore original priority
+                if (todoItem.classList.contains('urgent')) {
+                    todoItem.dataset.priority = 'urgent';
+                } else {
+                    todoItem.dataset.priority = 'normal';
+                }
+            }
+        }
+
+        // Add next todo from modal
+        function addNextTodo() {
+            showToast('할 일이 추가되었습니다');
+        }
+
+        // Add schedule from modal
+        function addSchedule() {
+            showToast('일정이 등록되었습니다');
+        }
+
+        // Show callback modal with client name
+        function showCallbackModal(clientName) {
+            const modal = document.getElementById('callbackModal');
+            if (clientName) {
+                document.getElementById('modalClientName').textContent = clientName;
+            }
+            modal.classList.add('active');
         }
 
         // Evidence Search
