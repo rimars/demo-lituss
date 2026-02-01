@@ -1,0 +1,3168 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>노무사 워크플로우 자동화 - Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f7fa;
+            color: #1a1a2e;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .header .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        /* Navigation */
+        .nav {
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 0 24px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .nav-item {
+            padding: 16px 20px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            color: #6b7280;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .nav-item:hover {
+            color: #667eea;
+        }
+
+        .nav-item.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .nav-item .badge {
+            background: #ef4444;
+            color: white;
+            font-size: 11px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-left: 6px;
+        }
+
+        /* Main Content */
+        .main {
+            padding: 24px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-header h2 {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .stat-card .label {
+            color: #6b7280;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .stat-card .value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1a1a2e;
+        }
+
+        .stat-card .value.urgent {
+            color: #ef4444;
+        }
+
+        .stat-card .value.success {
+            color: #10b981;
+        }
+
+        /* Callback List */
+        .callback-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .callback-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 16px;
+            background: #f9fafb;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .callback-item:hover {
+            background: #f3f4f6;
+            transform: translateX(4px);
+        }
+
+        .callback-item.urgent {
+            border-left-color: #ef4444;
+        }
+
+        .callback-item .info {
+            flex: 1;
+        }
+
+        .callback-item .client-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .callback-item .summary {
+            color: #6b7280;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .callback-item .meta {
+            display: flex;
+            gap: 16px;
+            margin-top: 8px;
+            font-size: 12px;
+            color: #9ca3af;
+        }
+
+        .callback-item .actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5a6fd6;
+        }
+
+        .btn-secondary {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        .btn-secondary:hover {
+            background: #d1d5db;
+        }
+
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-kakao {
+            background: #fee500;
+            color: #000;
+        }
+
+        /* Calendar */
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .calendar-nav {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .calendar-nav button {
+            background: none;
+            border: 1px solid #e5e7eb;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .calendar-nav .current-month {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .view-toggle {
+            display: flex;
+            gap: 4px;
+            background: #f3f4f6;
+            padding: 4px;
+            border-radius: 8px;
+        }
+
+        .view-toggle button {
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            color: #6b7280;
+        }
+
+        .view-toggle button.active {
+            background: white;
+            color: #667eea;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            background: #e5e7eb;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .calendar-day-header {
+            background: #f9fafb;
+            padding: 12px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .calendar-day {
+            background: white;
+            min-height: 100px;
+            padding: 8px;
+        }
+
+        .calendar-day .date {
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .calendar-day.today .date {
+            background: #667eea;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .calendar-day.other-month {
+            background: #f9fafb;
+        }
+
+        .calendar-day.other-month .date {
+            color: #d1d5db;
+        }
+
+        .calendar-event {
+            font-size: 11px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-bottom: 2px;
+            cursor: pointer;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .calendar-event.consultation {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .calendar-event.meeting {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .calendar-event.court {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* Daily View */
+        .daily-view {
+            display: none;
+        }
+
+        .daily-view.active {
+            display: block;
+        }
+
+        .time-slots {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .time-slot {
+            display: flex;
+            border-bottom: 1px solid #e5e7eb;
+            min-height: 60px;
+        }
+
+        .time-label {
+            width: 80px;
+            padding: 8px;
+            font-size: 12px;
+            color: #6b7280;
+            text-align: right;
+            border-right: 1px solid #e5e7eb;
+        }
+
+        .time-content {
+            flex: 1;
+            padding: 4px 8px;
+            position: relative;
+        }
+
+        .time-event {
+            padding: 8px 12px;
+            border-radius: 6px;
+            margin-bottom: 4px;
+            cursor: pointer;
+        }
+
+        .time-event .title {
+            font-weight: 500;
+            font-size: 13px;
+        }
+
+        .time-event .client {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        /* Cases Page */
+        .cases-layout {
+            display: grid;
+            grid-template-columns: 300px 1fr 350px;
+            gap: 20px;
+            height: calc(100vh - 180px);
+        }
+
+        .case-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            overflow-y: auto;
+        }
+
+        .case-item {
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 1px solid #e5e7eb;
+            transition: all 0.2s;
+        }
+
+        .case-item:hover {
+            border-color: #667eea;
+        }
+
+        .case-item.active {
+            border-color: #667eea;
+            background: #f5f3ff;
+        }
+
+        .case-item .title {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .case-item .client {
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .case-item .status {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 500;
+            margin-top: 8px;
+        }
+
+        .case-item .status.open {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .case-item .status.in-progress {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        /* Timeline */
+        .timeline-container {
+            overflow-y: auto;
+            padding-right: 20px;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #e5e7eb;
+        }
+
+        .timeline-event {
+            position: relative;
+            padding: 16px;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            border: 1px solid #e5e7eb;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .timeline-event:hover {
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .timeline-event::before {
+            content: '';
+            position: absolute;
+            left: -26px;
+            top: 20px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #667eea;
+            border: 2px solid white;
+            box-shadow: 0 0 0 2px #667eea;
+        }
+
+        .timeline-event .date {
+            font-size: 12px;
+            color: #6b7280;
+            margin-bottom: 4px;
+        }
+
+        .timeline-event .title {
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .timeline-event .summary {
+            font-size: 14px;
+            color: #4b5563;
+            line-height: 1.6;
+        }
+
+        .timeline-event .type-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 500;
+            margin-top: 8px;
+        }
+
+        .timeline-event .type-badge.employment {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .timeline-event .type-badge.harassment {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .timeline-event .type-badge.wage {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .timeline-event .type-badge.dismissal {
+            background: #fecaca;
+            color: #991b1b;
+        }
+
+        /* Evidence Panel */
+        .evidence-panel {
+            overflow-y: auto;
+        }
+
+        .evidence-item {
+            padding: 12px;
+            background: #f9fafb;
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+
+        .evidence-item .type {
+            font-size: 11px;
+            color: #6b7280;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+        }
+
+        .evidence-item .quote {
+            font-size: 14px;
+            font-style: italic;
+            color: #374151;
+            border-left: 3px solid #667eea;
+            padding-left: 12px;
+        }
+
+        .evidence-upload {
+            border: 2px dashed #d1d5db;
+            border-radius: 8px;
+            padding: 24px;
+            text-align: center;
+            color: #6b7280;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .evidence-upload:hover {
+            border-color: #667eea;
+            color: #667eea;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 16px;
+            background: #f3f4f6;
+            padding: 4px;
+            border-radius: 8px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            border: none;
+            background: transparent;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            color: #6b7280;
+        }
+
+        .tab.active {
+            background: white;
+            color: #667eea;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .tab .count {
+            background: #667eea;
+            color: white;
+            font-size: 11px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-left: 4px;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow: hidden;
+        }
+
+        .modal-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #6b7280;
+        }
+
+        .modal-body {
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .modal-footer {
+            padding: 16px 20px;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 6px;
+            color: #374151;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        /* Schedule List (Dashboard) */
+        .schedule-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .schedule-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 16px;
+            background: #f9fafb;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            cursor: pointer;
+            transition: all 0.2s;
+            gap: 16px;
+        }
+
+        .schedule-item:hover {
+            background: #f3f4f6;
+            transform: translateX(4px);
+        }
+
+        .schedule-item.incident {
+            border-left-color: #10b981;
+            background: #f0fdf4;
+        }
+
+        .schedule-item.incident:hover {
+            background: #dcfce7;
+        }
+
+        .schedule-time {
+            font-size: 16px;
+            font-weight: 700;
+            color: #374151;
+            min-width: 50px;
+        }
+
+        .schedule-info {
+            flex: 1;
+        }
+
+        .schedule-title {
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .schedule-client {
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .schedule-type {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .schedule-type.consultation {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .schedule-type.case {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        /* Calendar Call Count */
+        .calendar-day .call-count {
+            font-size: 10px;
+            color: #667eea;
+            background: #eef2ff;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-top: 4px;
+            display: inline-block;
+        }
+
+        /* ========== CASE MANAGEMENT ENHANCED ========== */
+
+        /* Case Header Panel */
+        .case-header-panel {
+            background: white;
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .case-header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .case-main-info {
+            flex: 1;
+        }
+
+        .case-badge-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+        }
+
+        .case-type-badge {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .case-type-badge.wage {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .case-type-badge.dismissal {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .case-type-badge.harassment {
+            background: #fce7f3;
+            color: #9d174d;
+        }
+
+        .case-type-badge.accident {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .case-status-badge {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .case-status-badge.in-progress {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .case-status-badge.open {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .case-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 12px;
+        }
+
+        .case-meta-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .case-meta-item strong {
+            color: #374151;
+        }
+
+        .case-actions {
+            display: flex;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .btn-complete {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-complete:hover {
+            background: #059669;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        /* Progress Steps */
+        .case-progress {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 0;
+            overflow-x: auto;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 80px;
+        }
+
+        .step-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #e5e7eb;
+            color: #6b7280;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .progress-step.completed .step-icon {
+            background: #10b981;
+            color: white;
+        }
+
+        .progress-step.active .step-icon {
+            background: #667eea;
+            color: white;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.2);
+        }
+
+        .step-label {
+            font-size: 12px;
+            font-weight: 500;
+            color: #374151;
+            text-align: center;
+        }
+
+        .step-date {
+            font-size: 11px;
+            color: #9ca3af;
+            margin-top: 2px;
+        }
+
+        .progress-line {
+            flex: 1;
+            height: 3px;
+            background: #e5e7eb;
+            margin: 0 -8px;
+            margin-bottom: 28px;
+        }
+
+        .progress-line.completed {
+            background: #10b981;
+        }
+
+        /* Case List Enhanced */
+        .case-item-header {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 6px;
+        }
+
+        .case-item-badge {
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .case-item-badge.wage {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .case-item-badge.dismissal {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .case-item-badge.harassment {
+            background: #fce7f3;
+            color: #9d174d;
+        }
+
+        .case-item-badge.accident {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .case-item-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 8px;
+        }
+
+        .case-amount {
+            font-size: 12px;
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        /* AI Summary Section */
+        .ai-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .ai-summary-section {
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .ai-summary-text {
+            font-size: 14px;
+            line-height: 1.7;
+            color: #4b5563;
+        }
+
+        .ai-summary-text strong {
+            color: #1a1a2e;
+            background: #fef3c7;
+            padding: 0 4px;
+            border-radius: 2px;
+        }
+
+        /* Issue List */
+        .issue-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .issue-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            background: #f9fafb;
+            border-radius: 8px;
+            border-left: 3px solid;
+        }
+
+        .issue-item.high {
+            border-left-color: #ef4444;
+        }
+
+        .issue-item.medium {
+            border-left-color: #f59e0b;
+        }
+
+        .issue-item.low {
+            border-left-color: #10b981;
+        }
+
+        .issue-priority {
+            font-size: 10px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+
+        .issue-item.high .issue-priority {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .issue-item.medium .issue-priority {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .issue-item.low .issue-priority {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .issue-text {
+            font-size: 13px;
+            color: #374151;
+        }
+
+        /* Prediction Card */
+        .prediction-card {
+            background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+            border-radius: 10px;
+            padding: 16px;
+            border: 1px solid #d1fae5;
+        }
+
+        .prediction-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .prediction-label {
+            font-size: 13px;
+            color: #374151;
+            min-width: 90px;
+        }
+
+        .prediction-bar {
+            flex: 1;
+            height: 8px;
+            background: #d1fae5;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .prediction-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #10b981, #059669);
+            border-radius: 4px;
+        }
+
+        .prediction-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #059669;
+        }
+
+        .prediction-amount {
+            font-size: 20px;
+            font-weight: 700;
+            color: #059669;
+        }
+
+        .prediction-detail {
+            font-size: 12px;
+            color: #6b7280;
+            text-align: right;
+        }
+
+        /* Action List */
+        .action-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .action-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: #f9fafb;
+            border-radius: 8px;
+        }
+
+        .action-number {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #667eea;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 13px;
+            flex-shrink: 0;
+        }
+
+        .action-content {
+            flex: 1;
+        }
+
+        .action-title {
+            font-weight: 600;
+            font-size: 13px;
+            margin-bottom: 2px;
+        }
+
+        .action-desc {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        /* Precedent List */
+        .precedent-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .precedent-item {
+            padding: 12px;
+            background: #f9fafb;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .precedent-item:hover {
+            background: #f3f4f6;
+        }
+
+        .precedent-title {
+            font-size: 12px;
+            color: #6b7280;
+            margin-bottom: 4px;
+        }
+
+        .precedent-summary {
+            font-size: 13px;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+
+        .precedent-result {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+
+        .precedent-result.win {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        /* Timeline Enhanced */
+        .timeline-filters {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 6px 12px;
+            border: 1px solid #e5e7eb;
+            background: white;
+            border-radius: 16px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-btn:hover {
+            border-color: #667eea;
+            color: #667eea;
+        }
+
+        .filter-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .timeline-event .event-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+
+        .timeline-event .evidence-count {
+            background: #667eea;
+            color: white;
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+
+        .timeline-event .event-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .event-actions {
+            display: flex;
+            gap: 4px;
+        }
+
+        .btn-icon {
+            width: 28px;
+            height: 28px;
+            border: 1px solid #e5e7eb;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-icon:hover {
+            background: #f3f4f6;
+            border-color: #667eea;
+        }
+
+        .type-badge.action {
+            background: #e0e7ff;
+            color: #3730a3;
+        }
+
+        /* Evidence Enhanced */
+        .evidence-total {
+            background: #f3f4f6;
+            padding: 4px 10px;
+            border-radius: 10px;
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .evidence-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .evidence-link {
+            font-size: 10px;
+            color: #667eea;
+            background: #eef2ff;
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+
+        .evidence-meta {
+            font-size: 11px;
+            color: #9ca3af;
+            margin-top: 8px;
+        }
+
+        /* Cases Layout - 4 columns */
+        .cases-layout {
+            display: grid;
+            grid-template-columns: 260px 1fr 1fr 300px;
+            gap: 16px;
+            height: calc(100vh - 320px);
+        }
+
+        /* Evidence Search */
+        .evidence-search {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .evidence-search input {
+            flex: 1;
+            padding: 10px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .evidence-search button {
+            padding: 10px 16px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .evidence-search button:hover {
+            background: #5a6fd6;
+        }
+
+        .evidence-item.highlight {
+            border: 2px solid #667eea;
+            background: #f5f3ff;
+        }
+
+        .evidence-item .highlight-text {
+            background: #fef08a;
+            padding: 0 2px;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            padding: 12px 20px;
+            background: #1f2937;
+            color: white;
+            border-radius: 8px;
+            display: none;
+            z-index: 1001;
+            animation: slideIn 0.3s ease;
+        }
+
+        .toast.show {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* ========== RESPONSIVE ========== */
+
+        /* Tablet (768px 이하) */
+        @media (max-width: 768px) {
+            .header {
+                padding: 12px 16px;
+            }
+
+            .header h1 {
+                font-size: 16px;
+            }
+
+            .header .user-info span {
+                display: none;
+            }
+
+            .nav {
+                padding: 0 8px;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .nav-item {
+                padding: 12px 14px;
+                font-size: 13px;
+                white-space: nowrap;
+            }
+
+            .main {
+                padding: 16px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+
+            .stat-card {
+                padding: 16px;
+            }
+
+            .stat-card .value {
+                font-size: 24px;
+            }
+
+            .callback-item {
+                flex-direction: column;
+            }
+
+            .callback-item .actions {
+                flex-direction: row;
+                width: 100%;
+                margin-top: 12px;
+            }
+
+            .callback-item .actions .btn {
+                flex: 1;
+            }
+
+            .calendar-header {
+                flex-direction: column;
+                gap: 12px;
+                align-items: stretch;
+            }
+
+            .calendar-nav {
+                justify-content: center;
+            }
+
+            .view-toggle {
+                justify-content: center;
+            }
+
+            .calendar-day {
+                min-height: 70px;
+                padding: 4px;
+            }
+
+            .calendar-day .date {
+                font-size: 11px;
+            }
+
+            .calendar-event {
+                font-size: 9px;
+                padding: 1px 3px;
+            }
+
+            .cases-layout {
+                grid-template-columns: 1fr;
+                height: auto;
+                gap: 16px;
+            }
+
+            .cases-layout .card {
+                height: auto !important;
+                max-height: 400px;
+            }
+
+            .timeline {
+                padding-left: 24px;
+            }
+
+            .timeline-event::before {
+                left: -20px;
+                width: 10px;
+                height: 10px;
+            }
+
+            .modal {
+                width: 95%;
+                max-height: 90vh;
+            }
+
+            .modal-body {
+                max-height: 60vh;
+            }
+        }
+
+        /* Tablet - Schedule List & Cases */
+        @media (max-width: 1200px) {
+            .cases-layout {
+                grid-template-columns: 240px 1fr 280px;
+            }
+
+            .cases-layout > .card:nth-child(2) {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .schedule-item {
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+
+            .schedule-time {
+                font-size: 14px;
+            }
+
+            .schedule-type {
+                order: -1;
+                width: 100%;
+                text-align: center;
+                margin-bottom: 4px;
+            }
+
+            .evidence-search {
+                flex-direction: column;
+            }
+
+            .evidence-search button {
+                width: 100%;
+            }
+
+            .calendar-day .call-count {
+                font-size: 8px;
+                padding: 1px 4px;
+            }
+
+            /* Case Header Panel - Mobile */
+            .case-header-panel {
+                padding: 16px;
+            }
+
+            .case-header-top {
+                flex-direction: column;
+            }
+
+            .case-title {
+                font-size: 18px;
+            }
+
+            .case-meta-row {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .case-actions {
+                flex-wrap: wrap;
+                width: 100%;
+            }
+
+            .case-actions .btn {
+                flex: 1;
+                min-width: calc(50% - 4px);
+            }
+
+            .case-progress {
+                overflow-x: auto;
+                padding-bottom: 8px;
+            }
+
+            .progress-step {
+                min-width: 60px;
+            }
+
+            .step-icon {
+                width: 30px;
+                height: 30px;
+                font-size: 12px;
+            }
+
+            .step-label {
+                font-size: 10px;
+            }
+
+            .cases-layout {
+                grid-template-columns: 1fr;
+                height: auto;
+            }
+
+            .cases-layout > .card {
+                display: none;
+                height: 400px !important;
+            }
+
+            .cases-layout > .card.mobile-active {
+                display: flex !important;
+            }
+
+            .mobile-case-nav {
+                display: flex;
+            }
+
+            .timeline-filters {
+                overflow-x: auto;
+                flex-wrap: nowrap;
+                padding-bottom: 8px;
+            }
+
+            .filter-btn {
+                white-space: nowrap;
+            }
+        }
+
+        /* Mobile (480px 이하) */
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 14px;
+            }
+
+            .nav-item {
+                padding: 10px 12px;
+                font-size: 12px;
+            }
+
+            .nav-item .badge {
+                font-size: 10px;
+                padding: 1px 5px;
+            }
+
+            .main {
+                padding: 12px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+
+            .stat-card {
+                padding: 12px;
+            }
+
+            .stat-card .label {
+                font-size: 11px;
+            }
+
+            .stat-card .value {
+                font-size: 20px;
+            }
+
+            .card-header {
+                padding: 12px 16px;
+                flex-direction: column;
+                gap: 8px;
+                align-items: flex-start;
+            }
+
+            .card-header h2 {
+                font-size: 14px;
+            }
+
+            .card-body {
+                padding: 12px;
+            }
+
+            .callback-item {
+                padding: 12px;
+            }
+
+            .callback-item .client-name {
+                font-size: 14px;
+            }
+
+            .callback-item .summary {
+                font-size: 13px;
+            }
+
+            .callback-item .meta {
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+
+            .btn {
+                padding: 10px 14px;
+                font-size: 12px;
+            }
+
+            /* 캘린더 - 모바일에서는 리스트 뷰 권장 텍스트 */
+            .calendar-day-header {
+                padding: 8px 4px;
+                font-size: 11px;
+            }
+
+            .calendar-day {
+                min-height: 50px;
+                padding: 2px;
+            }
+
+            .calendar-day .date {
+                font-size: 10px;
+            }
+
+            .calendar-day.today .date {
+                width: 20px;
+                height: 20px;
+                font-size: 10px;
+            }
+
+            .calendar-event {
+                font-size: 8px;
+                padding: 1px 2px;
+                margin-bottom: 1px;
+            }
+
+            .time-label {
+                width: 50px;
+                font-size: 11px;
+            }
+
+            .time-event .title {
+                font-size: 12px;
+            }
+
+            .time-event .client {
+                font-size: 11px;
+            }
+
+            .case-item .title {
+                font-size: 13px;
+            }
+
+            .case-item .client {
+                font-size: 12px;
+            }
+
+            .timeline-event {
+                padding: 12px;
+            }
+
+            .timeline-event .date {
+                font-size: 11px;
+            }
+
+            .timeline-event .title {
+                font-size: 14px;
+            }
+
+            .timeline-event .summary {
+                font-size: 13px;
+            }
+
+            .evidence-item {
+                padding: 10px;
+            }
+
+            .evidence-item .quote {
+                font-size: 13px;
+            }
+
+            .evidence-upload {
+                padding: 16px;
+            }
+
+            .tabs {
+                padding: 3px;
+            }
+
+            .tab {
+                padding: 8px;
+                font-size: 12px;
+            }
+
+            .tab .count {
+                font-size: 10px;
+                padding: 1px 5px;
+            }
+
+            .form-group label {
+                font-size: 12px;
+            }
+
+            .form-group input,
+            .form-group textarea,
+            .form-group select {
+                font-size: 14px;
+                padding: 10px;
+            }
+
+            .toast {
+                left: 12px;
+                right: 12px;
+                bottom: 12px;
+                text-align: center;
+            }
+
+            .schedule-item {
+                padding: 10px 12px;
+            }
+
+            .schedule-time {
+                font-size: 13px;
+                min-width: 40px;
+            }
+
+            .schedule-title {
+                font-size: 13px;
+            }
+
+            .schedule-client {
+                font-size: 11px;
+            }
+
+            .schedule-type {
+                font-size: 10px;
+                padding: 3px 8px;
+            }
+
+            .calendar-day .call-count {
+                display: none;
+            }
+
+            /* Case Header - Compact for Mobile */
+            .case-header-panel {
+                padding: 12px;
+                margin-bottom: 12px;
+            }
+
+            .case-badge-row {
+                gap: 4px;
+            }
+
+            .case-type-badge, .case-status-badge {
+                font-size: 10px;
+                padding: 3px 8px;
+            }
+
+            .case-title {
+                font-size: 16px;
+                margin-bottom: 8px;
+            }
+
+            .case-meta-row {
+                font-size: 12px;
+                gap: 6px;
+            }
+
+            .case-actions {
+                gap: 6px;
+                margin-top: 12px;
+            }
+
+            .case-actions .btn {
+                padding: 8px 10px;
+                font-size: 11px;
+            }
+
+            .case-progress {
+                display: none;
+            }
+
+            /* AI Summary - Compact */
+            .ai-summary-section {
+                margin-bottom: 16px;
+            }
+
+            .section-title {
+                font-size: 13px;
+            }
+
+            .ai-summary-text {
+                font-size: 13px;
+            }
+
+            .action-item {
+                flex-wrap: wrap;
+            }
+
+            .action-item .btn {
+                width: 100%;
+                margin-top: 8px;
+            }
+        }
+
+        /* 사건관리 페이지 모바일 탭 네비게이션 */
+        .mobile-case-nav {
+            display: none;
+            background: #f3f4f6;
+            padding: 4px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+
+        .mobile-case-nav button {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: transparent;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            color: #6b7280;
+            cursor: pointer;
+        }
+
+        .mobile-case-nav button.active {
+            background: white;
+            color: #667eea;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <h1>노무사 워크플로우 자동화</h1>
+        <div class="user-info">
+            <span>김노무 노무사</span>
+            <div class="avatar">김</div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-item active" data-page="dashboard">
+            대시보드
+        </div>
+        <div class="nav-item" data-page="schedule">
+            스케줄 현황
+        </div>
+        <div class="nav-item" data-page="cases">
+            사건 관리
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Page 1: 대시보드 -->
+        <div class="page active" id="page-dashboard">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="label">오늘 예약 상담</div>
+                    <div class="value">4</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">오늘 전화 예약</div>
+                    <div class="value">7</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">콜백 대기</div>
+                    <div class="value urgent">3</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">처리중 사건</div>
+                    <div class="value success">5</div>
+                </div>
+            </div>
+
+            <!-- 오늘 이후 예정된 일정 -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>오늘 예정 일정</h2>
+                    <span style="color: #6b7280; font-size: 13px;">현재 시간 이후</span>
+                </div>
+                <div class="card-body">
+                    <div class="schedule-list">
+                        <div class="schedule-item" onclick="showReservationModal()">
+                            <div class="schedule-time">10:00</div>
+                            <div class="schedule-info">
+                                <div class="schedule-title">김영수 임금체불 상담</div>
+                                <div class="schedule-client">010-1111-2222</div>
+                            </div>
+                            <div class="schedule-type consultation">상담</div>
+                        </div>
+                        <div class="schedule-item incident" onclick="navigateToCase('김영수 임금체불 사건')">
+                            <div class="schedule-time">11:00</div>
+                            <div class="schedule-info">
+                                <div class="schedule-title">김영수 임금체불 사건 - 서류 준비</div>
+                                <div class="schedule-client">고용노동청 진정서 제출</div>
+                            </div>
+                            <div class="schedule-type case">사건</div>
+                        </div>
+                        <div class="schedule-item" onclick="showReservationModal()">
+                            <div class="schedule-time">14:00</div>
+                            <div class="schedule-info">
+                                <div class="schedule-title">최민지 부당해고 상담</div>
+                                <div class="schedule-client">010-9876-5432</div>
+                            </div>
+                            <div class="schedule-type consultation">상담</div>
+                        </div>
+                        <div class="schedule-item incident" onclick="navigateToCase('정수민 직장내괴롭힘')">
+                            <div class="schedule-time">15:30</div>
+                            <div class="schedule-info">
+                                <div class="schedule-title">정수민 괴롭힘 사건 - 증인 면담</div>
+                                <div class="schedule-client">피해 동료 진술 확보</div>
+                            </div>
+                            <div class="schedule-type case">사건</div>
+                        </div>
+                        <div class="schedule-item" onclick="showReservationModal()">
+                            <div class="schedule-time">16:00</div>
+                            <div class="schedule-info">
+                                <div class="schedule-title">신규 상담 예약</div>
+                                <div class="schedule-client">010-5555-6666 (전화 예약)</div>
+                            </div>
+                            <div class="schedule-type consultation">상담</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 콜백 요청 목록 -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>콜백 요청 목록</h2>
+                    <button class="btn btn-secondary">전체보기</button>
+                </div>
+                <div class="card-body">
+                    <div class="callback-list">
+                        <div class="callback-item urgent" onclick="showCallbackModal()">
+                            <div class="info">
+                                <div class="client-name">홍길동</div>
+                                <div class="summary">6개월간 임금 체불 상담 요청. 회사 측에서 경영난을 이유로 급여를 지급하지 않고 있음. 퇴직금도 미지급 상태.</div>
+                                <div class="meta">
+                                    <span>010-1234-5678</span>
+                                    <span>30분 전</span>
+                                    <span style="color: #ef4444;">긴급</span>
+                                </div>
+                            </div>
+                            <div class="actions">
+                                <button class="btn btn-primary" onclick="event.stopPropagation(); showToast('전화 연결 중...')">전화하기</button>
+                                <button class="btn btn-kakao" onclick="event.stopPropagation(); showKakaoModal()">카톡 요청</button>
+                            </div>
+                        </div>
+
+                        <div class="callback-item" onclick="showCallbackModal()">
+                            <div class="info">
+                                <div class="client-name">이영희</div>
+                                <div class="summary">직장 내 괴롭힘 상담. 상사로부터 지속적인 폭언과 업무 배제를 당하고 있음. 녹음 파일 보유.</div>
+                                <div class="meta">
+                                    <span>010-2345-6789</span>
+                                    <span>1시간 전</span>
+                                </div>
+                            </div>
+                            <div class="actions">
+                                <button class="btn btn-primary" onclick="event.stopPropagation(); showToast('전화 연결 중...')">전화하기</button>
+                                <button class="btn btn-kakao" onclick="event.stopPropagation(); showKakaoModal()">카톡 요청</button>
+                            </div>
+                        </div>
+
+                        <div class="callback-item" onclick="showCallbackModal()">
+                            <div class="info">
+                                <div class="client-name">박철수</div>
+                                <div class="summary">부당해고 관련 상담. 정당한 사유 없이 해고 통보를 받음. 해고예고수당도 미지급.</div>
+                                <div class="meta">
+                                    <span>010-3456-7890</span>
+                                    <span>2시간 전</span>
+                                </div>
+                            </div>
+                            <div class="actions">
+                                <button class="btn btn-primary" onclick="event.stopPropagation(); showToast('전화 연결 중...')">전화하기</button>
+                                <button class="btn btn-kakao" onclick="event.stopPropagation(); showKakaoModal()">카톡 요청</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page 2: 스케줄 현황 -->
+        <div class="page" id="page-schedule">
+            <div class="card">
+                <div class="card-body">
+                    <div class="calendar-header">
+                        <div class="calendar-nav">
+                            <button onclick="prevMonth()">&lt;</button>
+                            <span class="current-month">2024년 1월</span>
+                            <button onclick="nextMonth()">&gt;</button>
+                        </div>
+                        <div class="view-toggle">
+                            <button class="active" onclick="setView('month', this)">월간</button>
+                            <button onclick="setView('week', this)">주간</button>
+                            <button onclick="setView('day', this)">일간</button>
+                        </div>
+                    </div>
+
+                    <!-- Monthly View -->
+                    <div class="calendar-view monthly-view">
+                        <div class="calendar-grid">
+                            <div class="calendar-day-header">일</div>
+                            <div class="calendar-day-header">월</div>
+                            <div class="calendar-day-header">화</div>
+                            <div class="calendar-day-header">수</div>
+                            <div class="calendar-day-header">목</div>
+                            <div class="calendar-day-header">금</div>
+                            <div class="calendar-day-header">토</div>
+
+                            <div class="calendar-day other-month"><div class="date">31</div></div>
+                            <div class="calendar-day"><div class="date">1</div></div>
+                            <div class="calendar-day">
+                                <div class="date">2</div>
+                                <span class="call-count">콜 2건</span>
+                            </div>
+                            <div class="calendar-day">
+                                <div class="date">3</div>
+                                <div class="calendar-event consultation" onclick="showReservationModal()">10:00 홍길동 상담</div>
+                                <span class="call-count">콜 3건</span>
+                            </div>
+                            <div class="calendar-day"><div class="date">4</div></div>
+                            <div class="calendar-day">
+                                <div class="date">5</div>
+                                <div class="calendar-event court" onclick="showReservationModal()">14:00 서울지방법원</div>
+                                <span class="call-count">콜 1건</span>
+                            </div>
+                            <div class="calendar-day"><div class="date">6</div></div>
+
+                            <div class="calendar-day"><div class="date">7</div></div>
+                            <div class="calendar-day">
+                                <div class="date">8</div>
+                                <div class="calendar-event consultation" onclick="showReservationModal()">09:00 이영희 상담</div>
+                                <div class="calendar-event meeting" onclick="showReservationModal()">15:00 내부회의</div>
+                                <span class="call-count">콜 5건</span>
+                            </div>
+                            <div class="calendar-day">
+                                <div class="date">9</div>
+                                <span class="call-count">콜 2건</span>
+                            </div>
+                            <div class="calendar-day">
+                                <div class="date">10</div>
+                                <div class="calendar-event consultation" onclick="showReservationModal()">11:00 박철수 상담</div>
+                                <span class="call-count">콜 4건</span>
+                            </div>
+                            <div class="calendar-day"><div class="date">11</div></div>
+                            <div class="calendar-day"><div class="date">12</div></div>
+                            <div class="calendar-day">
+                                <div class="date">13</div>
+                                <span class="call-count">콜 1건</span>
+                            </div>
+
+                            <div class="calendar-day">
+                                <div class="date">14</div>
+                                <span class="call-count">콜 3건</span>
+                            </div>
+                            <div class="calendar-day today">
+                                <div class="date">15</div>
+                                <div class="calendar-event consultation" onclick="showReservationModal()">10:00 김영수 상담</div>
+                                <div class="calendar-event consultation" onclick="showReservationModal()">14:00 최민지 상담</div>
+                                <span class="call-count">콜 7건</span>
+                            </div>
+                            <div class="calendar-day">
+                                <div class="date">16</div>
+                                <div class="calendar-event court" onclick="showReservationModal()">10:00 고용노동청</div>
+                            </div>
+                            <div class="calendar-day"><div class="date">17</div></div>
+                            <div class="calendar-day">
+                                <div class="date">18</div>
+                                <div class="calendar-event consultation" onclick="showReservationModal()">09:00 정수민 상담</div>
+                            </div>
+                            <div class="calendar-day"><div class="date">19</div></div>
+                            <div class="calendar-day"><div class="date">20</div></div>
+
+                            <div class="calendar-day"><div class="date">21</div></div>
+                            <div class="calendar-day"><div class="date">22</div></div>
+                            <div class="calendar-day">
+                                <div class="date">23</div>
+                                <div class="calendar-event meeting" onclick="showReservationModal()">14:00 교육</div>
+                            </div>
+                            <div class="calendar-day"><div class="date">24</div></div>
+                            <div class="calendar-day"><div class="date">25</div></div>
+                            <div class="calendar-day"><div class="date">26</div></div>
+                            <div class="calendar-day"><div class="date">27</div></div>
+
+                            <div class="calendar-day"><div class="date">28</div></div>
+                            <div class="calendar-day"><div class="date">29</div></div>
+                            <div class="calendar-day"><div class="date">30</div></div>
+                            <div class="calendar-day"><div class="date">31</div></div>
+                            <div class="calendar-day other-month"><div class="date">1</div></div>
+                            <div class="calendar-day other-month"><div class="date">2</div></div>
+                            <div class="calendar-day other-month"><div class="date">3</div></div>
+                        </div>
+                    </div>
+
+                    <!-- Daily View -->
+                    <div class="daily-view">
+                        <div class="time-slots">
+                            <div class="time-slot">
+                                <div class="time-label">09:00</div>
+                                <div class="time-content"></div>
+                            </div>
+                            <div class="time-slot">
+                                <div class="time-label">10:00</div>
+                                <div class="time-content">
+                                    <div class="time-event consultation" onclick="showReservationModal()" style="background: #dbeafe;">
+                                        <div class="title">임금체불 상담</div>
+                                        <div class="client">김영수 | 010-1234-5678</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="time-slot">
+                                <div class="time-label">11:00</div>
+                                <div class="time-content"></div>
+                            </div>
+                            <div class="time-slot">
+                                <div class="time-label">12:00</div>
+                                <div class="time-content" style="background: #f9fafb;">
+                                    <span style="color: #9ca3af; font-size: 12px;">점심시간</span>
+                                </div>
+                            </div>
+                            <div class="time-slot">
+                                <div class="time-label">13:00</div>
+                                <div class="time-content"></div>
+                            </div>
+                            <div class="time-slot">
+                                <div class="time-label">14:00</div>
+                                <div class="time-content">
+                                    <div class="time-event" onclick="showReservationModal()" style="background: #fef3c7;">
+                                        <div class="title">부당해고 상담</div>
+                                        <div class="client">최민지 | 010-9876-5432</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="time-slot">
+                                <div class="time-label">15:00</div>
+                                <div class="time-content"></div>
+                            </div>
+                            <div class="time-slot">
+                                <div class="time-label">16:00</div>
+                                <div class="time-content"></div>
+                            </div>
+                            <div class="time-slot">
+                                <div class="time-label">17:00</div>
+                                <div class="time-content"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page 3: 사건 관리 -->
+        <div class="page" id="page-cases">
+            <!-- 사건 헤더 (선택된 사건 정보) -->
+            <div class="case-header-panel" id="caseHeaderPanel">
+                <div class="case-header-top">
+                    <div class="case-main-info">
+                        <div class="case-badge-row">
+                            <span class="case-type-badge wage">임금체불</span>
+                            <span class="case-type-badge dismissal">부당해고</span>
+                            <span class="case-status-badge in-progress">진행중</span>
+                        </div>
+                        <h1 class="case-title">김영수 임금체불 및 부당해고 사건</h1>
+                        <div class="case-meta-row">
+                            <span class="case-meta-item"><strong>의뢰인:</strong> 김영수</span>
+                            <span class="case-meta-item"><strong>연락처:</strong> 010-1111-2222</span>
+                            <span class="case-meta-item"><strong>수임일:</strong> 2024-01-12</span>
+                            <span class="case-meta-item"><strong>담당:</strong> 김노무 노무사</span>
+                            <span class="case-meta-item"><strong>사건번호:</strong> INC-2024-0012</span>
+                        </div>
+                    </div>
+                    <div class="case-actions">
+                        <button class="btn btn-secondary" onclick="showStatusChangeModal()">상태 변경</button>
+                        <button class="btn btn-primary" onclick="showAddScheduleModal()">일정 추가</button>
+                        <button class="btn btn-success" onclick="showDocumentModal()">문서 생성</button>
+                        <button class="btn btn-complete" onclick="showCompleteModal()">완료 처리</button>
+                    </div>
+                </div>
+
+                <!-- 진행 단계 프로그레스 -->
+                <div class="case-progress">
+                    <div class="progress-step completed">
+                        <div class="step-icon">✓</div>
+                        <div class="step-label">접수</div>
+                        <div class="step-date">01/12</div>
+                    </div>
+                    <div class="progress-line completed"></div>
+                    <div class="progress-step completed">
+                        <div class="step-icon">✓</div>
+                        <div class="step-label">사실조사</div>
+                        <div class="step-date">01/13</div>
+                    </div>
+                    <div class="progress-line completed"></div>
+                    <div class="progress-step active">
+                        <div class="step-icon">3</div>
+                        <div class="step-label">진정서 작성</div>
+                        <div class="step-date">진행중</div>
+                    </div>
+                    <div class="progress-line"></div>
+                    <div class="progress-step">
+                        <div class="step-icon">4</div>
+                        <div class="step-label">진정서 제출</div>
+                        <div class="step-date">-</div>
+                    </div>
+                    <div class="progress-line"></div>
+                    <div class="progress-step">
+                        <div class="step-icon">5</div>
+                        <div class="step-label">조사/심문</div>
+                        <div class="step-date">-</div>
+                    </div>
+                    <div class="progress-line"></div>
+                    <div class="progress-step">
+                        <div class="step-icon">6</div>
+                        <div class="step-label">종결</div>
+                        <div class="step-date">-</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 모바일용 사건 탭 네비게이션 -->
+            <div class="mobile-case-nav">
+                <button class="active" onclick="showMobileCaseSection('list')">목록</button>
+                <button onclick="showMobileCaseSection('detail')">상세</button>
+                <button onclick="showMobileCaseSection('timeline')">타임라인</button>
+                <button onclick="showMobileCaseSection('evidence')">증거</button>
+            </div>
+
+            <div class="cases-layout">
+                <!-- Left: Case List -->
+                <div class="card mobile-case-section mobile-active" id="case-list-section" style="height: 100%; display: flex; flex-direction: column;">
+                    <div class="card-header">
+                        <h2>사건 목록</h2>
+                        <button class="btn btn-primary btn-sm" onclick="showNewCaseModal()">+ 신규</button>
+                    </div>
+                    <div class="card-body" style="flex: 1; overflow: hidden; padding: 12px;">
+                        <div class="tabs">
+                            <button class="tab" onclick="setTab('inbox', this)">
+                                InBox
+                                <span class="count">3</span>
+                            </button>
+                            <button class="tab active" onclick="setTab('incident', this)">
+                                진행중
+                                <span class="count">5</span>
+                            </button>
+                        </div>
+
+                        <!-- InBox Tab -->
+                        <div class="case-list" id="inbox-list" style="display: none;">
+                            <div class="case-item" onclick="selectCase(this, 'inbox')">
+                                <div class="title">홍길동 임금체불 상담</div>
+                                <div class="client">2024-01-15 10:30 통화</div>
+                                <button class="btn btn-primary btn-sm" style="width: 100%; margin-top: 8px;" onclick="event.stopPropagation(); convertToCase()">사건화</button>
+                            </div>
+                            <div class="case-item" onclick="selectCase(this, 'inbox')">
+                                <div class="title">이영희 괴롭힘 상담</div>
+                                <div class="client">2024-01-14 15:20 통화</div>
+                                <button class="btn btn-primary btn-sm" style="width: 100%; margin-top: 8px;" onclick="event.stopPropagation(); convertToCase()">사건화</button>
+                            </div>
+                            <div class="case-item" onclick="selectCase(this, 'inbox')">
+                                <div class="title">박철수 해고 상담</div>
+                                <div class="client">2024-01-14 11:00 통화</div>
+                                <button class="btn btn-primary btn-sm" style="width: 100%; margin-top: 8px;" onclick="event.stopPropagation(); convertToCase()">사건화</button>
+                            </div>
+                        </div>
+
+                        <!-- Incident Tab -->
+                        <div class="case-list" id="incident-list">
+                            <div class="case-item active" onclick="selectCase(this, 'incident')">
+                                <div class="case-item-header">
+                                    <span class="case-item-badge wage">임금</span>
+                                    <span class="case-item-badge dismissal">해고</span>
+                                </div>
+                                <div class="title">김영수 임금체불 사건</div>
+                                <div class="client">김영수 | 010-1111-2222</div>
+                                <div class="case-item-footer">
+                                    <span class="status in-progress">진행중</span>
+                                    <span class="case-amount">1,400만원</span>
+                                </div>
+                            </div>
+                            <div class="case-item" onclick="selectCase(this, 'incident')">
+                                <div class="case-item-header">
+                                    <span class="case-item-badge dismissal">해고</span>
+                                </div>
+                                <div class="title">최민지 부당해고 사건</div>
+                                <div class="client">최민지 | 010-3333-4444</div>
+                                <div class="case-item-footer">
+                                    <span class="status open">접수</span>
+                                    <span class="case-amount">-</span>
+                                </div>
+                            </div>
+                            <div class="case-item" onclick="selectCase(this, 'incident')">
+                                <div class="case-item-header">
+                                    <span class="case-item-badge harassment">괴롭힘</span>
+                                </div>
+                                <div class="title">정수민 직장내괴롭힘</div>
+                                <div class="client">정수민 | 010-5555-6666</div>
+                                <div class="case-item-footer">
+                                    <span class="status in-progress">진행중</span>
+                                    <span class="case-amount">-</span>
+                                </div>
+                            </div>
+                            <div class="case-item" onclick="selectCase(this, 'incident')">
+                                <div class="case-item-header">
+                                    <span class="case-item-badge accident">산재</span>
+                                </div>
+                                <div class="title">한지민 산재 사건</div>
+                                <div class="client">한지민 | 010-7777-8888</div>
+                                <div class="case-item-footer">
+                                    <span class="status in-progress">진행중</span>
+                                    <span class="case-amount">-</span>
+                                </div>
+                            </div>
+                            <div class="case-item" onclick="selectCase(this, 'incident')">
+                                <div class="case-item-header">
+                                    <span class="case-item-badge wage">퇴직금</span>
+                                </div>
+                                <div class="title">오승환 퇴직금 사건</div>
+                                <div class="client">오승환 | 010-9999-0000</div>
+                                <div class="case-item-footer">
+                                    <span class="status open">접수</span>
+                                    <span class="case-amount">850만원</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Center-Left: AI 분석 & 사건 요약 -->
+                <div class="card mobile-case-section" id="case-detail-section" style="height: 100%; display: flex; flex-direction: column;">
+                    <div class="card-header">
+                        <h2>AI 사건 분석</h2>
+                        <span class="ai-badge">AI</span>
+                    </div>
+                    <div class="card-body" style="flex: 1; overflow-y: auto; padding: 16px;">
+                        <!-- 핵심 요약 -->
+                        <div class="ai-summary-section">
+                            <h3 class="section-title">사건 요약</h3>
+                            <p class="ai-summary-text">
+                                의뢰인 김영수는 (주)ABC 회사에서 2023년 3월부터 근무하였으나,
+                                9월부터 급여가 체불되기 시작하여 현재까지 <strong>총 1,400만원</strong>이 미지급 상태입니다.
+                                또한 임금 지급을 요청한 직후 정당한 사유 없이 해고 통보를 받아
+                                <strong>부당해고</strong>에 해당할 가능성이 높습니다.
+                            </p>
+                        </div>
+
+                        <!-- 쟁점 분석 -->
+                        <div class="ai-summary-section">
+                            <h3 class="section-title">핵심 쟁점</h3>
+                            <div class="issue-list">
+                                <div class="issue-item high">
+                                    <span class="issue-priority">높음</span>
+                                    <span class="issue-text">임금체불 (근로기준법 제43조 위반)</span>
+                                </div>
+                                <div class="issue-item high">
+                                    <span class="issue-priority">높음</span>
+                                    <span class="issue-text">부당해고 (근로기준법 제23조 위반)</span>
+                                </div>
+                                <div class="issue-item medium">
+                                    <span class="issue-priority">중간</span>
+                                    <span class="issue-text">해고예고수당 미지급</span>
+                                </div>
+                                <div class="issue-item low">
+                                    <span class="issue-priority">낮음</span>
+                                    <span class="issue-text">퇴직금 미지급 (1년 미만 근무)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 예상 결과 -->
+                        <div class="ai-summary-section">
+                            <h3 class="section-title">예상 결과</h3>
+                            <div class="prediction-card">
+                                <div class="prediction-row">
+                                    <span class="prediction-label">승소 가능성</span>
+                                    <div class="prediction-bar">
+                                        <div class="prediction-fill" style="width: 85%;"></div>
+                                    </div>
+                                    <span class="prediction-value">85%</span>
+                                </div>
+                                <div class="prediction-row">
+                                    <span class="prediction-label">예상 인용금액</span>
+                                    <span class="prediction-amount">약 1,520만원</span>
+                                </div>
+                                <div class="prediction-detail">
+                                    체불임금 1,400만원 + 해고예고수당 약 120만원
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 권장 조치 -->
+                        <div class="ai-summary-section">
+                            <h3 class="section-title">권장 조치</h3>
+                            <div class="action-list">
+                                <div class="action-item">
+                                    <span class="action-number">1</span>
+                                    <div class="action-content">
+                                        <div class="action-title">고용노동청 진정서 제출</div>
+                                        <div class="action-desc">임금체불 진정 (관할: 서울지방고용노동청)</div>
+                                    </div>
+                                    <button class="btn btn-sm btn-primary" onclick="showToast('진정서 초안 생성 중...')">초안 생성</button>
+                                </div>
+                                <div class="action-item">
+                                    <span class="action-number">2</span>
+                                    <div class="action-content">
+                                        <div class="action-title">노동위원회 구제신청</div>
+                                        <div class="action-desc">부당해고 구제신청 (기한: 해고일로부터 3개월)</div>
+                                    </div>
+                                    <button class="btn btn-sm btn-secondary" onclick="showToast('신청서 초안 생성 중...')">초안 생성</button>
+                                </div>
+                                <div class="action-item">
+                                    <span class="action-number">3</span>
+                                    <div class="action-content">
+                                        <div class="action-title">추가 증거 확보</div>
+                                        <div class="action-desc">급여명세서, 근태기록, 동료 진술서</div>
+                                    </div>
+                                    <button class="btn btn-sm btn-kakao" onclick="showKakaoModal()">자료 요청</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 유사 판례 -->
+                        <div class="ai-summary-section">
+                            <h3 class="section-title">유사 판례</h3>
+                            <div class="precedent-list">
+                                <div class="precedent-item" onclick="showToast('판례 상세 보기')">
+                                    <div class="precedent-title">서울지방법원 2023가단12345</div>
+                                    <div class="precedent-summary">임금체불 후 해고 → 부당해고 인정, 체불임금 전액 지급 명령</div>
+                                    <span class="precedent-result win">승소</span>
+                                </div>
+                                <div class="precedent-item" onclick="showToast('판례 상세 보기')">
+                                    <div class="precedent-title">중앙노동위원회 2023부해1234</div>
+                                    <div class="precedent-summary">경영난 주장에도 해고 정당성 불인정, 복직 및 임금 지급 결정</div>
+                                    <span class="precedent-result win">인용</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Center-Right: Timeline -->
+                <div class="card mobile-case-section" id="case-timeline-section" style="height: 100%; display: flex; flex-direction: column;">
+                    <div class="card-header">
+                        <h2>타임라인</h2>
+                        <button class="btn btn-primary btn-sm" onclick="showAddEventModal()">+ 이벤트</button>
+                    </div>
+                    <div class="card-body" style="flex: 1; overflow-y: auto; padding: 12px;">
+                        <!-- 타임라인 필터 -->
+                        <div class="timeline-filters">
+                            <button class="filter-btn active" onclick="filterTimeline('all', this)">전체</button>
+                            <button class="filter-btn" onclick="filterTimeline('employment', this)">입퇴사</button>
+                            <button class="filter-btn" onclick="filterTimeline('wage', this)">임금</button>
+                            <button class="filter-btn" onclick="filterTimeline('dismissal', this)">해고</button>
+                            <button class="filter-btn" onclick="filterTimeline('harassment', this)">괴롭힘</button>
+                        </div>
+
+                        <div class="timeline" id="timeline">
+                            <div class="timeline-event" data-type="employment" onclick="selectEvent(this)">
+                                <div class="event-header">
+                                    <span class="date">2023년 3월 1일</span>
+                                    <span class="evidence-count" title="연결된 증거">2</span>
+                                </div>
+                                <div class="title">입사</div>
+                                <div class="summary">(주)ABC 회사 영업부 대리로 입사. 월급여 350만원 계약.</div>
+                                <div class="event-footer">
+                                    <span class="type-badge employment">입사</span>
+                                    <div class="event-actions">
+                                        <button class="btn-icon" title="수정" onclick="event.stopPropagation(); showToast('이벤트 수정')">✎</button>
+                                        <button class="btn-icon" title="증거 연결" onclick="event.stopPropagation(); showToast('증거 연결')">📎</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="timeline-event" data-type="wage" onclick="selectEvent(this)">
+                                <div class="event-header">
+                                    <span class="date">2023년 9월 15일</span>
+                                    <span class="evidence-count" title="연결된 증거">3</span>
+                                </div>
+                                <div class="title">임금 체불 시작</div>
+                                <div class="summary">9월부터 급여가 지연되기 시작. 회사 측에서 경영난을 이유로 매월 급여 일부만 지급. 총 4개월간 1,400만원 미지급.</div>
+                                <div class="event-footer">
+                                    <span class="type-badge wage">임금체불</span>
+                                    <div class="event-actions">
+                                        <button class="btn-icon" title="수정" onclick="event.stopPropagation(); showToast('이벤트 수정')">✎</button>
+                                        <button class="btn-icon" title="증거 연결" onclick="event.stopPropagation(); showToast('증거 연결')">📎</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="timeline-event" data-type="wage" onclick="selectEvent(this)">
+                                <div class="event-header">
+                                    <span class="date">2024년 1월 5일</span>
+                                    <span class="evidence-count" title="연결된 증거">1</span>
+                                </div>
+                                <div class="title">내용증명 발송</div>
+                                <div class="summary">미지급 임금 총 1,400만원에 대해 내용증명 발송. 14일 내 지급 요청. 회사 측 무응답.</div>
+                                <div class="event-footer">
+                                    <span class="type-badge wage">임금체불</span>
+                                    <div class="event-actions">
+                                        <button class="btn-icon" title="수정" onclick="event.stopPropagation(); showToast('이벤트 수정')">✎</button>
+                                        <button class="btn-icon" title="증거 연결" onclick="event.stopPropagation(); showToast('증거 연결')">📎</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="timeline-event" data-type="dismissal" onclick="selectEvent(this)">
+                                <div class="event-header">
+                                    <span class="date">2024년 1월 10일</span>
+                                    <span class="evidence-count" title="연결된 증거">2</span>
+                                </div>
+                                <div class="title">해고 통보</div>
+                                <div class="summary">임금 지급 요청 5일 후 갑작스럽게 해고 통보. "경영상 이유"라고만 통보. 해고예고수당 미지급, 서면 해고 통지 없음.</div>
+                                <div class="event-footer">
+                                    <span class="type-badge dismissal">부당해고</span>
+                                    <div class="event-actions">
+                                        <button class="btn-icon" title="수정" onclick="event.stopPropagation(); showToast('이벤트 수정')">✎</button>
+                                        <button class="btn-icon" title="증거 연결" onclick="event.stopPropagation(); showToast('증거 연결')">📎</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="timeline-event" data-type="action" onclick="selectEvent(this)">
+                                <div class="event-header">
+                                    <span class="date">2024년 1월 12일</span>
+                                    <span class="evidence-count" title="연결된 증거">0</span>
+                                </div>
+                                <div class="title">노무사 상담 및 수임</div>
+                                <div class="summary">김노무 노무사 수임. 임금체불 진정 및 부당해고 구제신청 진행 예정.</div>
+                                <div class="event-footer">
+                                    <span class="type-badge action">조치</span>
+                                    <div class="event-actions">
+                                        <button class="btn-icon" title="수정" onclick="event.stopPropagation(); showToast('이벤트 수정')">✎</button>
+                                        <button class="btn-icon" title="증거 연결" onclick="event.stopPropagation(); showToast('증거 연결')">📎</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Evidence -->
+                <div class="card mobile-case-section" id="evidence-section" style="height: 100%; display: flex; flex-direction: column;">
+                    <div class="card-header">
+                        <h2>증거 자료</h2>
+                        <span class="evidence-total">8건</span>
+                    </div>
+                    <div class="card-body evidence-panel" style="flex: 1; overflow-y: auto;">
+                        <div class="evidence-search">
+                            <input type="text" id="evidenceSearchInput" placeholder="증거 내용 검색..." onkeyup="searchEvidence(event)">
+                            <button onclick="performEvidenceSearch()">검색</button>
+                        </div>
+
+                        <div id="evidenceList">
+                            <div class="evidence-item" data-content="9월 급여부터 조금씩 밀리기 시작했어요. 처음에는 며칠만 늦게 주더니 이제는 절반도 안 줘요." data-event="임금 체불 시작">
+                                <div class="evidence-header">
+                                    <span class="type">통화 녹취</span>
+                                    <span class="evidence-link" title="연결된 이벤트">임금 체불 시작</span>
+                                </div>
+                                <div class="quote">"9월 급여부터 조금씩 밀리기 시작했어요. 처음에는 며칠만 늦게 주더니 이제는 절반도 안 줘요."</div>
+                                <div class="evidence-meta">2024-01-12 녹취 | 00:45</div>
+                            </div>
+
+                            <div class="evidence-item" data-content="김영수씨, 내일까지 출근하지 않으면 무단결근으로 처리하겠습니다." data-event="해고 통보">
+                                <div class="evidence-header">
+                                    <span class="type">문자 메시지</span>
+                                    <span class="evidence-link" title="연결된 이벤트">해고 통보</span>
+                                </div>
+                                <div class="quote">"김영수씨, 내일까지 출근하지 않으면 무단결근으로 처리하겠습니다." - 인사팀</div>
+                                <div class="evidence-meta">2024-01-11 수신</div>
+                            </div>
+
+                            <div class="evidence-item" data-content="근로계약서 상 월 기본급 3,500,000원, 식대 100,000원, 교통비 100,000원" data-event="입사">
+                                <div class="evidence-header">
+                                    <span class="type">문서 (OCR)</span>
+                                    <span class="evidence-link" title="연결된 이벤트">입사</span>
+                                </div>
+                                <div class="quote">근로계약서 상 월 기본급 3,500,000원, 식대 100,000원, 교통비 100,000원...</div>
+                                <div class="evidence-meta">근로계약서.pdf | 2023-03-01</div>
+                            </div>
+
+                            <div class="evidence-item" data-content="체불임금 지급을 약속드립니다. 다음달 15일까지 500만원, 이후 매월 200만원씩 분할 지급" data-event="임금 체불 시작">
+                                <div class="evidence-header">
+                                    <span class="type">녹취록</span>
+                                    <span class="evidence-link" title="연결된 이벤트">임금 체불 시작</span>
+                                </div>
+                                <div class="quote">"체불임금 지급을 약속드립니다. 다음달 15일까지 500만원, 이후 매월 200만원씩 분할 지급"</div>
+                                <div class="evidence-meta">대표이사 통화 녹취 | 2023-11-20</div>
+                            </div>
+
+                            <div class="evidence-item" data-content="경영난으로 인해 급여 지급이 어렵습니다. 양해 부탁드립니다." data-event="임금 체불 시작">
+                                <div class="evidence-header">
+                                    <span class="type">이메일</span>
+                                    <span class="evidence-link" title="연결된 이벤트">임금 체불 시작</span>
+                                </div>
+                                <div class="quote">"경영난으로 인해 급여 지급이 어렵습니다. 양해 부탁드립니다." - 대표이사</div>
+                                <div class="evidence-meta">이메일 수신 | 2023-10-05</div>
+                            </div>
+                        </div>
+
+                        <div id="searchResultInfo" style="display: none; margin: 12px 0; padding: 8px; background: #eef2ff; border-radius: 6px; font-size: 13px; color: #4338ca;"></div>
+
+                        <div class="evidence-upload" onclick="showUploadModal()">
+                            <div style="font-size: 24px; margin-bottom: 8px;">+</div>
+                            <div>증거 파일 첨부</div>
+                            <div style="font-size: 12px;">(이미지 업로드 시 OCR 자동 변환)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Callback Modal -->
+    <div class="modal-overlay" id="callbackModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>상담 상세</h3>
+                <button class="modal-close" onclick="closeModal('callbackModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>고객명</label>
+                    <input type="text" value="홍길동" readonly>
+                </div>
+                <div class="form-group">
+                    <label>연락처</label>
+                    <input type="text" value="010-1234-5678" readonly>
+                </div>
+                <div class="form-group">
+                    <label>상담 내용</label>
+                    <textarea readonly>6개월간 임금 체불 상담 요청. 회사 측에서 경영난을 이유로 급여를 지급하지 않고 있음. 퇴직금도 미지급 상태. 총 미지급 금액은 약 2,100만원으로 추정됨.</textarea>
+                </div>
+                <div class="form-group">
+                    <label>AI 요약</label>
+                    <textarea readonly>- 이슈: 임금체불, 퇴직금 미지급
+- 체불 기간: 6개월
+- 추정 금액: 2,100만원
+- 회사 측 입장: 경영난
+- 권장 조치: 고용노동청 진정서 제출 검토</textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('callbackModal')">닫기</button>
+                <button class="btn btn-success" onclick="closeModal('callbackModal'); showToast('사건으로 등록되었습니다')">사건화</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Kakao Modal -->
+    <div class="modal-overlay" id="kakaoModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>카카오톡 상세 요청</h3>
+                <button class="modal-close" onclick="closeModal('kakaoModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>받는 사람</label>
+                    <input type="text" value="홍길동 (010-1234-5678)" readonly>
+                </div>
+                <div class="form-group">
+                    <label>요청 메시지</label>
+                    <textarea placeholder="추가로 필요한 정보나 서류를 요청하세요...">안녕하세요, 홍길동님.
+
+상담 내용 확인 중 추가로 필요한 서류가 있어 연락드립니다.
+
+1. 근로계약서 사본
+2. 급여명세서 (최근 6개월)
+3. 해고통지서 (있는 경우)
+
+위 서류들을 사진으로 찍어 회신해 주시면 감사하겠습니다.
+
+김노무 노무사 드림</textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('kakaoModal')">취소</button>
+                <button class="btn btn-kakao" onclick="closeModal('kakaoModal'); showToast('카카오톡이 발송되었습니다')">발송</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reservation Modal -->
+    <div class="modal-overlay" id="reservationModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>예약 상세</h3>
+                <button class="modal-close" onclick="closeModal('reservationModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>예약 유형</label>
+                    <input type="text" value="임금체불 상담" readonly>
+                </div>
+                <div class="form-group">
+                    <label>고객명</label>
+                    <input type="text" value="김영수" readonly>
+                </div>
+                <div class="form-group">
+                    <label>연락처</label>
+                    <input type="text" value="010-1234-5678" readonly>
+                </div>
+                <div class="form-group">
+                    <label>일시</label>
+                    <input type="text" value="2024년 1월 15일 (월) 10:00 - 11:00" readonly>
+                </div>
+                <div class="form-group">
+                    <label>관련 사건 요약</label>
+                    <textarea readonly>2023년 9월부터 임금 체불 시작. 총 미지급 금액 약 1,400만원. 2024년 1월 10일 부당해고 통보 받음.</textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('reservationModal'); showCancelConfirm()">예약 취소</button>
+                <button class="btn btn-primary" onclick="closeModal('reservationModal')">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // Navigation
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', () => {
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+
+                item.classList.add('active');
+                document.getElementById('page-' + item.dataset.page).classList.add('active');
+            });
+        });
+
+        // Calendar View Toggle
+        function setView(view, btn) {
+            document.querySelectorAll('.view-toggle button').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            if (view === 'day') {
+                document.querySelector('.monthly-view').style.display = 'none';
+                document.querySelector('.daily-view').classList.add('active');
+            } else {
+                document.querySelector('.monthly-view').style.display = 'block';
+                document.querySelector('.daily-view').classList.remove('active');
+            }
+        }
+
+        // Case Tabs
+        function setTab(tab, btn) {
+            document.querySelectorAll('.tabs .tab').forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
+
+            if (tab === 'inbox') {
+                document.getElementById('inbox-list').style.display = 'flex';
+                document.getElementById('incident-list').style.display = 'none';
+            } else {
+                document.getElementById('inbox-list').style.display = 'none';
+                document.getElementById('incident-list').style.display = 'flex';
+            }
+        }
+
+        // Select Case
+        function selectCase(el, type) {
+            const list = type === 'inbox' ? 'inbox-list' : 'incident-list';
+            document.querySelectorAll('#' + list + ' .case-item').forEach(c => c.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        // Select Timeline Event
+        function selectEvent(el) {
+            document.querySelectorAll('.timeline-event').forEach(e => e.style.borderColor = '#e5e7eb');
+            el.style.borderColor = '#667eea';
+        }
+
+        // Convert to Case
+        function convertToCase() {
+            showToast('사건으로 등록되었습니다');
+            setTab('incident', document.querySelector('.tabs .tab:last-child'));
+        }
+
+        // Modals
+        function showCallbackModal() {
+            document.getElementById('callbackModal').classList.add('active');
+        }
+
+        function showKakaoModal() {
+            document.getElementById('kakaoModal').classList.add('active');
+        }
+
+        function showReservationModal() {
+            document.getElementById('reservationModal').classList.add('active');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+
+        function showCancelConfirm() {
+            if (confirm('예약을 취소하시겠습니까? 고객에게 카카오톡 알림이 발송됩니다.')) {
+                showToast('예약이 취소되었습니다');
+            }
+        }
+
+        function showAddEventModal() {
+            showToast('이벤트 추가 기능 (데모)');
+        }
+
+        function showUploadModal() {
+            showToast('파일 업로드 기능 (데모)');
+        }
+
+        // Toast
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // Calendar Navigation (demo)
+        function prevMonth() {
+            document.querySelector('.current-month').textContent = '2023년 12월';
+        }
+
+        function nextMonth() {
+            document.querySelector('.current-month').textContent = '2024년 2월';
+        }
+
+        // Close modal on overlay click
+        document.querySelectorAll('.modal-overlay').forEach(overlay => {
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) {
+                    overlay.classList.remove('active');
+                }
+            });
+        });
+
+        // Show mobile case section
+        function showMobileCaseSection(section) {
+            const sections = {
+                'list': 'case-list-section',
+                'detail': 'case-detail-section',
+                'timeline': 'case-timeline-section',
+                'evidence': 'evidence-section'
+            };
+
+            // Update buttons
+            document.querySelectorAll('.mobile-case-nav button').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Show selected section
+            document.querySelectorAll('.cases-layout > .card').forEach(card => {
+                card.classList.remove('mobile-active');
+            });
+            document.getElementById(sections[section]).classList.add('mobile-active');
+        }
+
+        // Timeline filter
+        function filterTimeline(type, btn) {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            document.querySelectorAll('.timeline-event').forEach(event => {
+                if (type === 'all' || event.dataset.type === type) {
+                    event.style.display = 'block';
+                } else {
+                    event.style.display = 'none';
+                }
+            });
+        }
+
+        // Modal functions for new features
+        function showStatusChangeModal() {
+            showToast('상태 변경: 접수 → 조사 → 진정서 → 제출 → 심문 → 종결');
+        }
+
+        function showAddScheduleModal() {
+            showToast('일정 추가 모달 (데모)');
+        }
+
+        function showDocumentModal() {
+            showToast('문서 생성: 진정서 / 구제신청서 / 내용증명 선택');
+        }
+
+        function showCompleteModal() {
+            if (confirm('이 사건을 완료 처리하시겠습니까?')) {
+                showToast('사건이 완료 처리되었습니다');
+            }
+        }
+
+        function showNewCaseModal() {
+            showToast('신규 사건 등록 모달 (데모)');
+        }
+
+        // Navigate to Case from Dashboard
+        function navigateToCase(caseName) {
+            // Switch to cases page
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+
+            document.querySelector('[data-page="cases"]').classList.add('active');
+            document.getElementById('page-cases').classList.add('active');
+
+            // Find and select the case
+            const caseItems = document.querySelectorAll('#incident-list .case-item');
+            caseItems.forEach(item => {
+                item.classList.remove('active');
+                if (item.querySelector('.title').textContent.includes(caseName.split(' ')[0])) {
+                    item.classList.add('active');
+                }
+            });
+
+            showToast('사건 관리로 이동: ' + caseName);
+        }
+
+        // Evidence Search
+        function searchEvidence(event) {
+            if (event.key === 'Enter') {
+                performEvidenceSearch();
+            }
+        }
+
+        function performEvidenceSearch() {
+            const searchTerm = document.getElementById('evidenceSearchInput').value.toLowerCase().trim();
+            const evidenceItems = document.querySelectorAll('#evidenceList .evidence-item');
+            const resultInfo = document.getElementById('searchResultInfo');
+            let matchCount = 0;
+
+            if (!searchTerm) {
+                // Reset all
+                evidenceItems.forEach(item => {
+                    item.classList.remove('highlight');
+                    item.style.display = 'block';
+                    const quote = item.querySelector('.quote');
+                    quote.innerHTML = quote.textContent;
+                });
+                resultInfo.style.display = 'none';
+                return;
+            }
+
+            evidenceItems.forEach(item => {
+                const content = item.getAttribute('data-content').toLowerCase();
+                const quote = item.querySelector('.quote');
+                const originalText = quote.textContent;
+
+                if (content.includes(searchTerm)) {
+                    item.classList.add('highlight');
+                    item.style.display = 'block';
+                    matchCount++;
+
+                    // Highlight matching text
+                    const regex = new RegExp(`(${searchTerm})`, 'gi');
+                    quote.innerHTML = originalText.replace(regex, '<span class="highlight-text">$1</span>');
+                } else {
+                    item.classList.remove('highlight');
+                    item.style.display = 'none';
+                }
+            });
+
+            resultInfo.style.display = 'block';
+            resultInfo.textContent = `"${searchTerm}" 검색 결과: ${matchCount}건`;
+
+            if (matchCount === 0) {
+                resultInfo.textContent = `"${searchTerm}"에 대한 검색 결과가 없습니다.`;
+                resultInfo.style.background = '#fef3c7';
+                resultInfo.style.color = '#92400e';
+            } else {
+                resultInfo.style.background = '#eef2ff';
+                resultInfo.style.color = '#4338ca';
+            }
+        }
+    </script>
+</body>
+</html>
